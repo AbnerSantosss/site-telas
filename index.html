@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TelaHub — Gerenciamento Profissional de Telas Digitais</title>
+  <meta name="description" content="Gerencie todas as suas telas digitais remotamente, sem hardware proprietário. Atualize conteúdo em tempo real, com resiliência offline e pareamento em menos de 2 minutos." />
+  <meta name="keywords" content="digital signage, gerenciamento de telas, mídia digital, telahub, displays corporativos" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       DESIGN SYSTEM — TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg-primary:    #0B0F19;
+      --bg-secondary:  #0F1525;
+      --bg-card:       rgba(15, 21, 37, 0.7);
+      --bg-card-hover: rgba(20, 28, 50, 0.85);
+      --border:        rgba(255,255,255,0.07);
+      --border-active: rgba(0, 240, 255, 0.35);
+
+      --cyan:          #00F0FF;
+      --cyan-dim:      rgba(0, 240, 255, 0.12);
+      --cyan-glow:     0 0 24px rgba(0, 240, 255, 0.35);
+
+      --text-primary:  #F0F4FF;
+      --text-secondary:#8B92A8;
+      --text-muted:    #4B5270;
+
+      --radius-sm:     8px;
+      --radius-md:     14px;
+      --radius-lg:     20px;
+      --radius-xl:     28px;
+
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ═══════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: #1e2540; border-radius: 99px; }
+
+    /* ═══════════════════════════════════════════
+       NOISE OVERLAY
+    ═══════════════════════════════════════════ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT HELPERS
+    ═══════════════════════════════════════════ */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+    section { padding: 100px 0; position: relative; }
+
+    /* ═══════════════════════════════════════════
+       GLOW ORBS (background atmosphere)
+    ═══════════════════════════════════════════ */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(90px);
+    }
+    .orb-cyan  { background: rgba(0, 240, 255, 0.07); }
+    .orb-blue  { background: rgba(60, 80, 200, 0.06); }
+    .orb-purple{ background: rgba(140, 60, 220, 0.05); }
+
+    /* ═══════════════════════════════════════════
+       TYPOGRAPHY SCALE
+    ═══════════════════════════════════════════ */
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      padding: 6px 14px;
+      border: 1px solid var(--border-active);
+      border-radius: 99px;
+      background: var(--cyan-dim);
+      margin-bottom: 20px;
+    }
+    .label::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    h1, h2, h3 { line-height: 1.15; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700; }
+    h3 { font-size: 1.1rem; font-weight: 600; }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .text-cyan { color: var(--cyan); }
+    .text-secondary { color: var(--text-secondary); }
+
+    /* ═══════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--cyan);
+      color: #0B0F19;
+      box-shadow: 0 0 28px rgba(0, 240, 255, 0.3);
+    }
+    .btn-primary:hover {
+      background: #33f4ff;
+      box-shadow: 0 0 44px rgba(0, 240, 255, 0.5);
+      transform: translateY(-1px);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.18);
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.04);
+    }
+    .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 15, 25, 0.85);
+      transition: var(--transition);
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--cyan);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo-icon svg { width: 18px; height: 18px; color: #0B0F19; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-links a {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+    .nav-mobile-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--text-primary); }
+
+    /* ═══════════════════════════════════════════
+       SECTION 1 — HERO
+    ═══════════════════════════════════════════ */
+    #hero {
+      padding: 160px 0 80px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .hero-content { max-width: 560px; }
+    .hero-headline { margin-bottom: 24px; }
+    .hero-subheadline {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .hero-trust {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .hero-trust svg { color: var(--cyan); width: 14px; height: 14px; }
+
+    /* Hero Visual — Dashboard Mockup */
+    .hero-visual {
+      position: relative;
+    }
+    .hero-mockup {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow:
+        0 0 0 1px rgba(0,240,255,0.08),
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 80px rgba(0,240,255,0.06);
+    }
+    .hero-mockup-bar {
+      background: #0d1220;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mockup-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .mockup-dot:nth-child(1) { background: #ff5f57; }
+    .mockup-dot:nth-child(2) { background: #febc2e; }
+    .mockup-dot:nth-child(3) { background: #28c840; }
+    .mockup-url {
+      margin-left: 10px;
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .mockup-body {
+      background: #090d16;
+      padding: 20px;
+    }
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .mockup-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .mockup-badge-total {
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: var(--cyan-dim);
+      color: var(--cyan);
+      border: 1px solid var(--border-active);
+    }
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .mockup-display-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      transition: var(--transition);
+    }
+    .mockup-display-card:hover {
+      border-color: rgba(0,240,255,0.2);
+      background: rgba(0,240,255,0.03);
+    }
+    .mockup-screen {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .mockup-screen-inner {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .screen-a { background: linear-gradient(135deg, #1a2a4a, #0d1f3c); }
+    .screen-b { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+    .screen-c { background: linear-gradient(135deg, #0f2027, #203a43); }
+    .screen-d { background: linear-gradient(135deg, #2d1b69, #11998e); opacity: 0.5; }
+    .screen-e { background: linear-gradient(135deg, #141e30, #243b55); opacity: 0.5; }
+    .screen-f { background: linear-gradient(135deg, #1a1a2e, #16213e); opacity: 0.5; }
+    .screen-icon { opacity: 0.3; }
+    .screen-icon svg { width: 20px; height: 20px; color: var(--cyan); }
+    .mockup-display-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mockup-display-name {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .badge {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-online {
+      background: rgba(0,240,255,0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(0,240,255,0.3);
+      animation: pulse-badge 2s ease-in-out infinite;
+    }
+    .badge-offline {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    @keyframes pulse-badge {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+    .mockup-stat-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .mockup-stat {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .mockup-stat-label { font-size: 0.58rem; color: var(--text-muted); margin-bottom: 2px; }
+    .mockup-stat-value { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); }
+    .mockup-stat-value.cyan { color: var(--cyan); }
+
+    /* floating badge */
+    .hero-float-badge {
+      position: absolute;
+      bottom: -16px;
+      left: -20px;
+      background: rgba(15, 21, 37, 0.95);
+      border: 1px solid var(--border-active);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), var(--cyan-glow);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .float-icon { font-size: 1.2rem; }
+    .float-text { font-size: 0.72rem; }
+    .float-text strong { display: block; color: var(--text-primary); font-size: 0.8rem; }
+    .float-text span { color: var(--text-muted); }
+
+    /* ═══════════════════════════════════════════
+       SECTION 2 — ARGUMENTO TÉCNICO
+    ═══════════════════════════════════════════ */
+    #argumento {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.015), transparent);
+    }
+    .argumento-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .argumento-header h2 { max-width: 640px; margin: 0 auto 16px; }
+    .argumento-header p {
+      max-width: 500px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .argumento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .argumento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .argumento-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .argumento-card:hover { border-color: var(--border-active); transform: translateY(-3px); }
+    .argumento-card:hover::before { opacity: 1; }
+    .argumento-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--cyan-dim);
+      border: 1px solid var(--border-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .argumento-icon svg { width: 22px; height: 22px; color: var(--cyan); }
+    .argumento-card h3 { margin-bottom: 12px; font-size: 1.2rem; }
+    .argumento-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* proof points */
+    .proof-list {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .proof-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .proof-item::before {
+      content: '';
+      flex-shrink: 0;
+      width: 16px; height: 16px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: var(--cyan-dim);
+      border: 1px solid var(--border-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2300F0FF'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z'/%3E%3C/svg%3E");
+      background-size: 10px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION 3 — BENTO GRID DE RECURSOS
+    ═══════════════════════════════════════════ */
+    #recursos .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    #recursos .section-header h2 { margin-bottom: 12px; }
+    #recursos .section-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+
+    .bento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .bento-card:hover {
+      border-color: rgba(0,240,255,0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(0,240,255,0.04);
+    }
+
+    /* Large card — spans 2 rows */
+    .bento-card-large {
+      grid-row: span 2;
+    }
+
+    .bento-card-glow::after {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .bento-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--cyan-dim);
+      border: 1px solid var(--border-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .bento-icon svg { width: 20px; height: 20px; color: var(--cyan); }
+    .bento-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+    .bento-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    /* Canvas visual demo */
+    .canvas-demo {
+      margin-top: 24px;
+      border-radius: var(--radius-sm);
+      background: #06090f;
+      border: 1px solid var(--border);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .canvas-demo-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .canvas-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .canvas-layer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+    .layer-thumb {
+      width: 28px; height: 18px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .lt-img   { background: linear-gradient(90deg, #1e3a5f, #2d5a8e); }
+    .lt-text  { background: linear-gradient(90deg, #2d1b69, #4a2f8a); }
+    .lt-video { background: linear-gradient(90deg, #1a3a2a, #2d5a3d); }
+    .layer-name { flex: 1; }
+    .layer-fade {
+      font-size: 0.6rem;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Widget chips */
+    .widget-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 5px 12px;
+      transition: var(--transition);
+    }
+    .chip:hover {
+      border-color: rgba(0,240,255,0.25);
+      color: var(--text-primary);
+    }
+    .chip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+
+    /* Integration logos row */
+    .integration-row {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .integration-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    .integration-badge:hover {
+      border-color: rgba(0,240,255,0.2);
+      color: var(--text-primary);
+    }
+    .int-icon { font-size: 0.9rem; }
+
+    /* ═══════════════════════════════════════════
+       SECTION 4 — TABS DE CASOS DE USO
+    ═══════════════════════════════════════════ */
+    #casos {
+      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.01), transparent);
+    }
+    .casos-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .casos-header h2 { margin-bottom: 12px; }
+    .casos-header p { color: var(--text-secondary); font-size: 1rem; max-width: 520px; margin: 0 auto; }
+
+    .tabs-wrapper { position: relative; }
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 5px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs-nav::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 1;
+      min-width: max-content;
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--text-secondary); }
+    .tab-btn.active {
+      background: rgba(0,240,255,0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(0,240,255,0.2);
+    }
+    .tab-icon { font-size: 1rem; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+
+    .tab-content { }
+    .tab-content h3 { font-size: 1.5rem; margin-bottom: 14px; line-height: 1.25; }
+    .tab-content p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .tab-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tab-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .tab-feature-icon {
+      width: 28px; height: 28px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0,240,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    .tab-feature-text strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      margin-bottom: 2px;
+    }
+
+    .tab-visual {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tv-screen-sim {
+      flex: 1;
+      background: #06090f;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tv-screen-sim::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,240,255,0.04) 0%, transparent 70%);
+    }
+    .tv-screen-content { position: relative; z-index: 1; }
+    .tv-screen-content .screen-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION 5 — PREÇOS
+    ═══════════════════════════════════════════ */
+    #precos {
+      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.012), transparent);
+    }
+    .precos-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .precos-header h2 { margin-bottom: 12px; }
+    .precos-header p { color: var(--text-secondary); max-width: 480px; margin: 0 auto; }
+
+    .precos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .preco-card {
+      background: rgba(15, 21, 37, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .preco-card:hover { transform: translateY(-4px); }
+
+    /* Glassmorphic featured card */
+    .preco-card-featured {
+      border-color: rgba(0,240,255,0.35);
+      box-shadow:
+        0 0 0 1px rgba(0,240,255,0.15),
+        0 24px 64px rgba(0,0,0,0.4),
+        0 0 60px rgba(0,240,255,0.08);
+      background: rgba(0, 240, 255, 0.04);
+    }
+    .preco-card-featured:hover {
+      box-shadow:
+        0 0 0 1px rgba(0,240,255,0.3),
+        0 32px 80px rgba(0,0,0,0.5),
+        0 0 80px rgba(0,240,255,0.12);
+    }
+
+    .featured-tag {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: var(--cyan);
+      color: #0B0F19;
+    }
+
+    .plan-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .plan-name.featured { color: var(--cyan); }
+
+    .plan-price {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .plan-currency { font-size: 1.2rem; font-weight: 700; color: var(--text-secondary); }
+    .plan-amount { font-size: 2.8rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .plan-period { font-size: 0.85rem; color: var(--text-muted); }
+    .plan-consult {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .plan-description {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .plan-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 22px;
+    }
+    .preco-card-featured .plan-divider { background: rgba(0,240,255,0.15); }
+
+    .plan-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .plan-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .plan-check {
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0,240,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .plan-check svg { width: 10px; height: 10px; color: var(--cyan); }
+
+    .btn-plan {
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-plan-featured {
+      background: var(--cyan);
+      color: #0B0F19;
+      font-weight: 700;
+      box-shadow: 0 0 28px rgba(0,240,255,0.25);
+    }
+    .btn-plan-featured:hover {
+      box-shadow: 0 0 44px rgba(0,240,255,0.45);
+      transform: translateY(-1px);
+    }
+    .btn-plan-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-plan-outline:hover {
+      border-color: rgba(255,255,255,0.18);
+      color: var(--text-primary);
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER CTA STRIP
+    ═══════════════════════════════════════════ */
+    .cta-strip {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-strip h2 { max-width: 540px; margin: 0 auto 16px; }
+    .cta-strip p {
+      color: var(--text-secondary);
+      max-width: 400px;
+      margin: 0 auto 32px;
+      font-size: 1rem;
+    }
+    .cta-strip-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0 36px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .footer-brand { max-width: 220px; }
+    .footer-brand p {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-col h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 8px; }
+    .footer-col ul li a {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-bottom p { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ═══════════════════════════════════════════
+       SECTION DIVIDER LINE
+    ═══════════════════════════════════════════ */
+    .section-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.55s; }
+
+    /* Intersection Observer animation trigger */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.delay-1 { transition-delay: 0.1s; }
+    .reveal.delay-2 { transition-delay: 0.2s; }
+    .reveal.delay-3 { transition-delay: 0.3s; }
+    .reveal.delay-4 { transition-delay: 0.4s; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      section { padding: 72px 0; }
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero-visual { order: -1; }
+      .hero-content { max-width: 100%; }
+      .argumento-grid { grid-template-columns: 1fr; }
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-card-large { grid-row: auto; }
+      .tab-panel.active { grid-template-columns: 1fr; }
+      .precos-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .footer-links { gap: 28px; }
+      .nav-links { display: none; }
+      .nav-mobile-toggle { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.6rem; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .btn { width: 100%; justify-content: center; }
+      .cta-strip-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ────────────────────────────────────────────
+     NAVBAR
+──────────────────────────────────────────── -->
+<nav id="navbar" role="navigation" aria-label="Navegação principal">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="TelaHub Home">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1" y="1" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M6 15h6M9 12v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      TelaHub
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#recursos">Recursos</a></li>
+      <li><a href="#casos">Casos de Uso</a></li>
+      <li><a href="#precos">Preços</a></li>
+      <li><a href="#" style="color:var(--text-secondary)">Documentação</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost" style="padding:10px 20px;font-size:0.85rem">Entrar</a>
+      <a href="#" id="nav-cta-btn" class="btn btn-primary" style="padding:10px 20px;font-size:0.85rem">
+        Começar grátis
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ────────────────────────────────────────────
+     SECTION 1 — HERO
+──────────────────────────────────────────── -->
+<section id="hero" aria-labelledby="hero-heading">
+  <!-- Atmosphere orbs -->
+  <div class="orb orb-cyan" style="width:600px;height:600px;top:-200px;left:-200px;"></div>
+  <div class="orb orb-blue" style="width:500px;height:500px;top:100px;right:-150px;"></div>
+
+  <div class="container">
+    <div class="hero-inner">
+      <!-- Copy -->
+      <div class="hero-content">
+        <div class="label animate-in">Digital Signage Profissional</div>
+
+        <h1 id="hero-heading" class="hero-headline animate-in delay-1">
+          Suas TVs sob<br/>
+          <span class="text-gradient">controle total.</span><br/>
+          Sem hardware extra.
+        </h1>
+
+        <p class="hero-subheadline animate-in delay-2">
+          Crie layouts no <strong style="color:var(--text-primary)">Canvas Livre</strong> — horizontal 16:9 ou vertical 9:16 —, configure transições cena a cena e conecte qualquer TV ao painel em menos de 2 minutos com um código simples de pareamento. Nenhuma caixa preta atrás da tela. Nenhuma licença de hardware proprietário.
+        </p>
+
+        <div class="hero-actions animate-in delay-3">
+          <a href="#" id="hero-cta-btn" class="btn btn-primary">
+            Começar grátis agora
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#recursos" class="btn btn-ghost">Ver todos os recursos</a>
+        </div>
+
+        <div class="hero-trust animate-in delay-4">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.78 5.22a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 01-1.06 0L5.72 8.78a.75.75 0 011.06-1.06L8 9.44l2.72-2.72a.75.75 0 011.06 0z"/></svg>
+          Sem cartão de crédito · 14 dias grátis · Cancele quando quiser
+        </div>
+      </div>
+
+      <!-- Visual Mockup -->
+      <div class="hero-visual animate-in delay-2">
+        <div class="hero-mockup">
+          <div class="hero-mockup-bar">
+            <span class="mockup-dot"></span>
+            <span class="mockup-dot"></span>
+            <span class="mockup-dot"></span>
+            <span class="mockup-url">app.telahub.com.br/displays</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-header">
+              <span class="mockup-title">Seus Displays</span>
+              <span class="mockup-badge-total">6 conectados</span>
+            </div>
+            <div class="mockup-grid">
+              <!-- Online -->
+              <div class="mockup-display-card">
+                <div class="mockup-screen screen-a">
+                  <div class="mockup-screen-inner"><div class="screen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+                </div>
+                <div class="mockup-display-info"><span class="mockup-display-name">Hall Principal</span><span class="badge badge-online">ONLINE</span></div>
+              </div>
+              <div class="mockup-display-card">
+                <div class="mockup-screen screen-b">
+                  <div class="mockup-screen-inner"><div class="screen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+                </div>
+                <div class="mockup-display-info"><span class="mockup-display-name">Elevador A</span><span class="badge badge-online">ONLINE</span></div>
+              </div>
+              <div class="mockup-display-card">
+                <div class="mockup-screen screen-c">
+                  <div class="mockup-screen-inner"><div class="screen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+                </div>
+                <div class="mockup-display-info"><span class="mockup-display-name">Recepção</span><span class="badge badge-online">ONLINE</span></div>
+              </div>
+              <!-- Offline -->
+              <div class="mockup-display-card" style="opacity:0.6">
+                <div class="mockup-screen screen-d">
+                  <div class="mockup-screen-inner"><div class="screen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+                </div>
+                <div class="mockup-display-info"><span class="mockup-display-name">Sala de Reunião</span><span class="badge badge-offline">OFFLINE</span></div>
+              </div>
+              <div class="mockup-display-card" style="opacity:0.6">
+                <div class="mockup-screen screen-e">
+                  <div class="mockup-screen-inner"><div class="screen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+                </div>
+                <div class="mockup-display-info"><span class="mockup-display-name">Cafeteria</span><span class="badge badge-offline">OFFLINE</span></div>
+              </div>
+              <div class="mockup-display-card">
+                <div class="mockup-screen screen-a" style="opacity:0.8">
+                  <div class="mockup-screen-inner"><div class="screen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+                </div>
+                <div class="mockup-display-info"><span class="mockup-display-name">Loja Térreo</span><span class="badge badge-online">ONLINE</span></div>
+              </div>
+            </div>
+            <!-- Stats row -->
+            <div class="mockup-stat-row">
+              <div class="mockup-stat">
+                <div class="mockup-stat-label">Uptime médio</div>
+                <div class="mockup-stat-value cyan">99.7%</div>
+              </div>
+              <div class="mockup-stat">
+                <div class="mockup-stat-label">Conteúdo ativo</div>
+                <div class="mockup-stat-value">4 cenas</div>
+              </div>
+              <div class="mockup-stat">
+                <div class="mockup-stat-label">Última sync</div>
+                <div class="mockup-stat-value">há 3s</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating badge -->
+        <div class="hero-float-badge" aria-hidden="true">
+          <span class="float-icon">⚡</span>
+          <div class="float-text">
+            <strong>Atualização enviada</strong>
+            <span>Cardápio sync em 3 displays · agora</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────
+     SECTION 2 — ARGUMENTO TÉCNICO
+──────────────────────────────────────────── -->
+<section id="argumento" aria-labelledby="argumento-heading">
+  <div class="orb orb-purple" style="width:500px;height:500px;top:0;right:10%;"></div>
+  <div class="container">
+    <div class="argumento-header">
+      <div class="label reveal">Arquitetura do Produto</div>
+      <h2 id="argumento-heading" class="reveal delay-1">
+        Construído para funcionar onde<br/>
+        <span class="text-gradient">outras plataformas falham.</span>
+      </h2>
+      <p class="reveal delay-2">
+        Dois pilares de confiabilidade que protegem sua operação quando a rede oscila ou o time precisa publicar uma atualização urgente.
+      </p>
+    </div>
+
+    <div class="argumento-grid">
+      <!-- Card 1: Sincronização em Tempo Real -->
+      <div class="argumento-card reveal delay-1">
+        <div class="argumento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+        </div>
+        <h3>Sincronização em Tempo Real — Sem Recarregar</h3>
+        <p>
+          Alterações feitas no painel chegam aos displays via WebSocket de baixa latência. Não é necessário limpar cache, recarregar o navegador da tela ou recriar widgets do zero.
+        </p>
+        <div class="proof-list">
+          <div class="proof-item">Publique uma nova cena e veja a mudança na tela em segundos.</div>
+          <div class="proof-item">Atualize o cardápio, o comunicado ou o relatório sem tocar no dispositivo físico.</div>
+          <div class="proof-item">Controle total via navegador, de qualquer lugar com conexão à internet.</div>
+        </div>
+      </div>
+
+      <!-- Card 2: Resiliência Offline -->
+      <div class="argumento-card reveal delay-2">
+        <div class="argumento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9 12l2 2 4-4M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z"/>
+          </svg>
+        </div>
+        <h3>Resiliência Offline — Cache Failsafe Local</h3>
+        <p>
+          O conteúdo é armazenado localmente no dispositivo após cada sincronização. Se a internet do condomínio ou da loja oscilar ou cair por completo, as mídias e as transições continuam rodando exatamente como programadas.
+        </p>
+        <div class="proof-list">
+          <div class="proof-item">Zero telas pretas por falha de rede. Zero mensagens de erro visíveis ao público.</div>
+          <div class="proof-item">O player retoma a última playlist completa a partir do ponto correto do loop.</div>
+          <div class="proof-item">Quando a conexão volta, o painel sincroniza as atualizações pendentes automaticamente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────
+     SECTION 3 — BENTO GRID DE RECURSOS
+──────────────────────────────────────────── -->
+<section id="recursos" aria-labelledby="recursos-heading">
+  <div class="orb orb-cyan" style="width:400px;height:400px;bottom:0;left:-100px;"></div>
+  <div class="container">
+    <div class="section-header">
+      <div class="label reveal">Recursos da Plataforma</div>
+      <h2 id="recursos-heading" class="reveal delay-1">
+        Cada ferramenta projetada<br/>para operações reais.
+      </h2>
+      <p class="reveal delay-2">Sem funcionalidades decorativas. O que está aqui é o que os gestores de comunicação visual usam no dia a dia.</p>
+    </div>
+
+    <div class="bento-grid">
+
+      <!-- Card GRANDE: Canvas Multi-Cenas -->
+      <div class="bento-card bento-card-large bento-card-glow reveal">
+        <div class="bento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="14" rx="2"/>
+            <path d="M7 21h10M12 16v5"/>
+          </svg>
+        </div>
+        <h3>Estúdio Canvas Multi-Cenas</h3>
+        <p>
+          Monte layouts livres com controle absoluto de camadas — imagens, vídeos, textos e widgets empilhados na ordem exata que você definir. Configure transições independentes por cena com <strong style="color:var(--text-primary)">Fade ajustável em milissegundos</strong>, de 200ms a 5000ms, sem depender de templates fixos.
+        </p>
+        <p style="margin-top:10px;font-size:0.875rem;color:var(--text-muted)">
+          Suporta orientação horizontal 16:9 e vertical 9:16 no mesmo painel.
+        </p>
+        <div class="canvas-demo">
+          <div class="canvas-demo-label">Camadas da Cena 1 — Cardápio</div>
+          <div class="canvas-layers">
+            <div class="canvas-layer">
+              <div class="layer-thumb lt-img"></div>
+              <span class="layer-name">Imagem de fundo</span>
+              <span class="layer-fade">Fade 300ms</span>
+            </div>
+            <div class="canvas-layer">
+              <div class="layer-thumb lt-text"></div>
+              <span class="layer-name">Título + Preços</span>
+              <span class="layer-fade">Fade 500ms</span>
+            </div>
+            <div class="canvas-layer">
+              <div class="layer-thumb lt-video"></div>
+              <span class="layer-name">Vídeo Promocional</span>
+              <span class="layer-fade">Fade 200ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card MÉDIO: Widgets Corporativos -->
+      <div class="bento-card reveal delay-1">
+        <div class="bento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </div>
+        <h3>Ecossistema de Widgets Corporativos</h3>
+        <p>Blocos dinâmicos prontos para uso imediato. Arraste, configure e publique.</p>
+        <div class="widget-chips">
+          <div class="chip"><span class="chip-dot"></span>Previsão do Tempo</div>
+          <div class="chip"><span class="chip-dot"></span>Relógio & Data</div>
+          <div class="chip"><span class="chip-dot"></span>Notícias RSS</div>
+          <div class="chip"><span class="chip-dot"></span>Letreiro Rolável</div>
+          <div class="chip"><span class="chip-dot"></span>Páginas Web</div>
+          <div class="chip"><span class="chip-dot"></span>Contador Regressivo</div>
+          <div class="chip"><span class="chip-dot"></span>QR Code</div>
+        </div>
+      </div>
+
+      <!-- Card MÉDIO: Integrações de Elite -->
+      <div class="bento-card reveal delay-2">
+        <div class="bento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+          </svg>
+        </div>
+        <h3>Integrações de Elite Seguras</h3>
+        <p>Exiba dados ao vivo de plataformas corporativas diretamente na tela. Nenhuma exportação manual.</p>
+        <div class="integration-row">
+          <div class="integration-badge"><span class="int-icon">📊</span>Power BI</div>
+          <div class="integration-badge"><span class="int-icon">🗂️</span>Airtable</div>
+          <div class="integration-badge"><span class="int-icon">📄</span>Google Docs</div>
+          <div class="integration-badge"><span class="int-icon">📁</span>SharePoint</div>
+          <div class="integration-badge"><span class="int-icon">📑</span>PDF Remoto</div>
+          <div class="integration-badge"><span class="int-icon">📈</span>Google Sheets</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────
+     SECTION 4 — CASOS DE USO (TABS)
+──────────────────────────────────────────── -->
+<section id="casos" aria-labelledby="casos-heading">
+  <div class="orb orb-blue" style="width:600px;height:400px;top:0;right:0;"></div>
+  <div class="container">
+    <div class="casos-header">
+      <div class="label reveal">Casos de Uso</div>
+      <h2 id="casos-heading" class="reveal delay-1">
+        Cada mercado.<br/><span class="text-gradient">Uma plataforma unificada.</span>
+      </h2>
+      <p class="reveal delay-2">Escolha o segmento mais próximo da sua operação e veja como o TelaHub se encaixa no seu dia a dia.</p>
+    </div>
+
+    <div class="tabs-wrapper reveal delay-1">
+      <!-- Tab Nav -->
+      <div class="tabs-nav" role="tablist" aria-label="Casos de uso por segmento">
+        <button class="tab-btn active" id="tab-cond" role="tab" aria-selected="true" aria-controls="panel-cond" onclick="switchTab('cond')">
+          <span class="tab-icon">🏢</span> Condomínios
+        </button>
+        <button class="tab-btn" id="tab-corp" role="tab" aria-selected="false" aria-controls="panel-corp" onclick="switchTab('corp')">
+          <span class="tab-icon">🏙️</span> Prédios Corporativos
+        </button>
+        <button class="tab-btn" id="tab-varejo" role="tab" aria-selected="false" aria-controls="panel-varejo" onclick="switchTab('varejo')">
+          <span class="tab-icon">🍽️</span> Varejo & Alimentação
+        </button>
+        <button class="tab-btn" id="tab-rh" role="tab" aria-selected="false" aria-controls="panel-rh" onclick="switchTab('rh')">
+          <span class="tab-icon">📣</span> Endomarketing & RH
+        </button>
+      </div>
+
+      <!-- Painel: Condomínios -->
+      <div class="tab-panel active" id="panel-cond" role="tabpanel" aria-labelledby="tab-cond">
+        <div class="tab-content">
+          <h3>Substitua o mural de papel.<br/>Definitivamente.</h3>
+          <p>
+            Avisos de manutenção, convocações de assembleia, regras do salão de festas ou previsão do tempo para a semana: tudo publicado remotamente do computador do síndico ou da administradora, sem visita ao condomínio.
+          </p>
+          <div class="tab-features">
+            <div class="tab-feature">
+              <div class="tab-feature-icon">🖥️</div>
+              <div class="tab-feature-text"><strong>Telas em elevadores e halls</strong>Conteúdo vertical 9:16 nativo, projetado para o espaço físico do elevador.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">📋</div>
+              <div class="tab-feature-text"><strong>Convocação de assembleia</strong>Publique o edital em todas as telas simultaneamente com um clique.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">☀️</div>
+              <div class="tab-feature-text"><strong>Previsão do tempo automática</strong>Widget que atualiza a cada hora com dados da sua cidade, sem configuração manual.</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual">
+          <div class="tv-screen-sim">
+            <div class="tv-screen-content">
+              <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Condomínio Alameda Verde</div>
+              <div class="screen-title">📋 Aviso de Manutenção</div>
+              <p style="margin-top:6px;font-size:0.8rem;color:var(--text-secondary);">Elevador B — Parada para revisão<br/>Quinta-feira, 08h–12h</p>
+              <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted)">Publicado há 2 min · Síndico responsável</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:rgba(0,240,255,0.04);border:1px solid rgba(0,240,255,0.15);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Telas ativas</div>
+              <div style="font-weight:700;color:var(--text-primary)">4 / 4</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Última publicação</div>
+              <div style="font-weight:700;color:var(--text-primary)">Há 2 min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Corporativo -->
+      <div class="tab-panel" id="panel-corp" role="tabpanel" aria-labelledby="tab-corp">
+        <div class="tab-content">
+          <h3>Recepções e corredores que comunicam, não decoram.</h3>
+          <p>
+            Diretórios digitais de salas, painéis de boas-vindas a visitantes com nome e empresa, e gerenciamento centralizado de avisos para múltiplos andares — tudo operado por um único gestor de TI ou facilities.
+          </p>
+          <div class="tab-features">
+            <div class="tab-feature">
+              <div class="tab-feature-icon">🗺️</div>
+              <div class="tab-feature-text"><strong>Diretório digital de salas</strong>Planta interativa ou listagem de salas com ocupação em tempo real.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">👤</div>
+              <div class="tab-feature-text"><strong>Painel de boas-vindas</strong>Exibe nome e empresa do visitante esperado. Integra com Google Calendar.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">📡</div>
+              <div class="tab-feature-text"><strong>Gestão multi-andar centralizada</strong>Um painel, múltiplos andares e displays com permissões separadas por setor.</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual">
+          <div class="tv-screen-sim">
+            <div class="tv-screen-content">
+              <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">HUB Inovação — Recepção</div>
+              <div class="screen-title">👋 Bem-vindo, Carlos Mendes</div>
+              <p style="margin-top:6px;font-size:0.8rem;color:var(--text-secondary);">Empresa: TechBridge Ltda.<br/>Sala 304 · 14h30</p>
+              <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted)">Recepcionista: Amanda Costa</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:rgba(0,240,255,0.04);border:1px solid rgba(0,240,255,0.15);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Displays</div>
+              <div style="font-weight:700;color:var(--text-primary)">12 andares</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Visitantes hoje</div>
+              <div style="font-weight:700;color:var(--text-primary)">34</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Varejo & Alimentação -->
+      <div class="tab-panel" id="panel-varejo" role="tabpanel" aria-labelledby="tab-varejo">
+        <div class="tab-content">
+          <h3>Cardápio digital que você atualiza em 30 segundos.</h3>
+          <p>
+            Sem gráficos enviados para gráfica. Sem banners impressos. Altere preço, remova item esgotado ou ative uma promoção relâmpago diretamente do celular — a mudança aparece em todas as telas da loja em segundos.
+          </p>
+          <div class="tab-features">
+            <div class="tab-feature">
+              <div class="tab-feature-icon">💲</div>
+              <div class="tab-feature-text"><strong>Atualização instantânea de preços</strong>Sem precisar ir até o display ou acessar o dispositivo físico.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">🎯</div>
+              <div class="tab-feature-text"><strong>Promoções por horário</strong>Configure o cardápio do almoço e do jantar para alternar automaticamente por hora.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">📷</div>
+              <div class="tab-feature-text"><strong>Fotos e vídeos de produtos</strong>Carregue mídias diretamente na biblioteca do TelaHub e arraste para o canvas.</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual">
+          <div class="tv-screen-sim">
+            <div class="tv-screen-content">
+              <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Restaurante Central — Menu Board</div>
+              <div class="screen-title">🍝 Prato do Dia</div>
+              <p style="margin-top:6px;font-size:0.8rem;color:var(--text-secondary);">Macarrão à Bolonhesa<br/><strong style="color:var(--cyan);font-size:1rem">R$ 28,90</strong></p>
+              <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted)">Atualizado há 1 min · Gerente João</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:rgba(0,240,255,0.04);border:1px solid rgba(0,240,255,0.15);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Economia mensal</div>
+              <div style="font-weight:700;color:var(--cyan)">R$ 1.200+</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Impressão eliminada</div>
+              <div style="font-weight:700;color:var(--text-primary)">100%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Endomarketing & RH -->
+      <div class="tab-panel" id="panel-rh" role="tabpanel" aria-labelledby="tab-rh">
+        <div class="tab-content">
+          <h3>Suas metas chegam na tela da equipe. Não no e-mail ignorado.</h3>
+          <p>
+            Sincronize dashboards de performance, aniversariantes do mês, comunicados de RH e reconhecimentos públicos diretamente nas TVs dos setores operacionais — sem depender do time de TI para cada atualização.
+          </p>
+          <div class="tab-features">
+            <div class="tab-feature">
+              <div class="tab-feature-icon">📊</div>
+              <div class="tab-feature-text"><strong>Metas em tempo real via Power BI</strong>Relatório ao vivo atualizado automaticamente sem exportação manual.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">🎂</div>
+              <div class="tab-feature-text"><strong>Aniversariantes do dia</strong>Integração com a base de colaboradores para exibição automática e personalizada.</div>
+            </div>
+            <div class="tab-feature">
+              <div class="tab-feature-icon">📢</div>
+              <div class="tab-feature-text"><strong>Comunicados segmentados por setor</strong>Envie mensagens distintas para TVs de setores específicos sem afetar as demais.</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual">
+          <div class="tv-screen-sim">
+            <div class="tv-screen-content">
+              <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Setor Comercial — Meta Maio</div>
+              <div class="screen-title">📈 Vendas do Mês</div>
+              <p style="margin-top:6px;font-size:0.8rem;color:var(--text-secondary);">Realizado: <strong style="color:#4ade80">R$ 340.500</strong><br/>Meta: R$ 400.000 · <strong style="color:var(--cyan)">85% atingido</strong></p>
+              <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted)">Sincronizado via Power BI · ao vivo</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:rgba(0,240,255,0.04);border:1px solid rgba(0,240,255,0.15);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Setores ativos</div>
+              <div style="font-weight:700;color:var(--text-primary)">8 TVs</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:0.75rem;">
+              <div style="color:var(--text-muted);margin-bottom:4px">Autonomia do RH</div>
+              <div style="font-weight:700;color:var(--cyan)">100%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tabs-wrapper -->
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────
+     SECTION 5 — PREÇOS
+──────────────────────────────────────────── -->
+<section id="precos" aria-labelledby="precos-heading">
+  <div class="orb orb-cyan" style="width:500px;height:500px;bottom:-100px;right:-100px;"></div>
+  <div class="container">
+    <div class="precos-header">
+      <div class="label reveal">Planos e Preços</div>
+      <h2 id="precos-heading" class="reveal delay-1">
+        Preço por tela.<br/>
+        <span class="text-gradient">Sem surpresas.</span>
+      </h2>
+      <p class="reveal delay-2">Você paga pelo número de telas conectadas e ativas. Sem cobrança por usuários, por conteúdo ou por publicação.</p>
+    </div>
+
+    <div class="precos-grid">
+
+      <!-- Plano Starter -->
+      <div class="preco-card reveal delay-1">
+        <p class="plan-name">Starter</p>
+        <div class="plan-price">
+          <span class="plan-currency">R$</span>
+          <span class="plan-amount">69</span>
+          <span class="plan-period">/mês</span>
+        </div>
+        <p class="plan-description">Até 2 telas conectadas. Para pequenos comércios, consultórios e condomínios de torre única que estão começando a digitalizar a comunicação.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Até 2 telas conectadas
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Canvas Livre 16:9 e 9:16
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Widgets padrão (Clima, Relógio, RSS)
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Sincronização em tempo real
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Cache offline failsafe
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Suporte via e-mail
+          </li>
+        </ul>
+        <a href="#" id="cta-starter" class="btn btn-plan btn-plan-outline">Começar com Starter</a>
+      </div>
+
+      <!-- Plano Business — DESTAQUE -->
+      <div class="preco-card preco-card-featured reveal delay-2" style="margin-top:-12px">
+        <span class="featured-tag">Mais Escolhido</span>
+        <p class="plan-name featured">Business</p>
+        <div class="plan-price">
+          <span class="plan-currency" style="color:var(--cyan)">R$</span>
+          <span class="plan-amount" style="color:var(--text-primary)">149</span>
+          <span class="plan-period">/mês</span>
+        </div>
+        <p class="plan-description">Até 6 telas conectadas. Para operações com múltiplos pontos de comunicação que exigem confiabilidade e velocidade de resposta.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            <strong style="color:var(--text-primary)">Até 6 telas conectadas</strong>
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Tudo do plano Starter
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Biblioteca de transições avançadas
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Integrações Power BI e Airtable
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Agendamento de playlists por horário
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            <strong style="color:var(--cyan)">Suporte prioritário com SLA</strong>
+          </li>
+        </ul>
+        <a href="#" id="cta-business" class="btn btn-plan btn-plan-featured">
+          Começar com Business
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Plano Enterprise -->
+      <div class="preco-card reveal delay-3">
+        <p class="plan-name">Enterprise</p>
+        <p class="plan-consult">Sob consulta</p>
+        <p class="plan-description">Para redes com mais de 10 telas ou que exigem White Label, integrações customizadas e suporte dedicado com gerente de conta.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Acima de 10 telas conectadas
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            <strong style="color:var(--text-primary)">White Label completo</strong> — sua marca no painel
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Integrações e API customizadas
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Gerente de conta dedicado
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            SLA garantido em contrato
+          </li>
+          <li class="plan-feature">
+            <span class="plan-check"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M10.28 3.28a.75.75 0 0 0-1.06-1.06L4.5 6.94 2.78 5.22a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l5-5z"/></svg></span>
+            Onboarding e treinamento presencial
+          </li>
+        </ul>
+        <a href="#" id="cta-enterprise" class="btn btn-plan btn-plan-outline">Falar com Comercial</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────
+     STRIP CTA FINAL
+──────────────────────────────────────────── -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="label" style="margin:0 auto 20px;width:fit-content">Comece Agora</div>
+    <h2 class="reveal">Sua primeira tela ativa<br/>em menos de 5 minutos.</h2>
+    <p class="reveal delay-1">
+      Crie a conta, monte o canvas, gere o código de pareamento e conecte a TV. Sem instalador, sem técnico no local.
+    </p>
+    <div class="cta-strip-actions reveal delay-2">
+      <a href="#" id="strip-cta-btn" class="btn btn-primary" style="font-size:1rem;padding:16px 32px;">
+        Criar conta gratuita
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn btn-ghost" style="font-size:1rem;padding:16px 32px;">Agendar demonstração</a>
+    </div>
+    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-muted)">14 dias gratuitos · sem cartão de crédito · cancele quando quiser</p>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────
+     FOOTER
+──────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <div class="nav-logo-icon">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="1" y="1" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 15h6M9 12v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          TelaHub
+        </a>
+        <p>Gerenciamento profissional de telas digitais para operações sérias. Feito no Brasil.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Produto</h4>
+          <ul>
+            <li><a href="#recursos">Recursos</a></li>
+            <li><a href="#precos">Preços</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Roadmap</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Casos de Uso</h4>
+          <ul>
+            <li><a href="#">Condomínios</a></li>
+            <li><a href="#">Corporativo</a></li>
+            <li><a href="#">Varejo</a></li>
+            <li><a href="#">Endomarketing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#">Sobre</a></li>
+            <li><a href="#">Contato</a></li>
+            <li><a href="#">Privacidade</a></li>
+            <li><a href="#">Termos de Uso</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TelaHub. Todos os direitos reservados.</p>
+      <p>CNPJ 00.000.000/0001-00 · São Paulo, Brasil</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ────────────────────────────────────────────
+     JAVASCRIPT
+──────────────────────────────────────────── -->
+<script>
+  // ── Tabs
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+      panel.classList.remove('active');
+    });
+    document.getElementById('tab-' + id).classList.add('active');
+    document.getElementById('tab-' + id).setAttribute('aria-selected', 'true');
+    document.getElementById('panel-' + id).classList.add('active');
+  }
+
+  // ── Intersection Observer for scroll animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ── Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.style.boxShadow = '0 1px 32px rgba(0,0,0,0.4)';
+    } else {
+      navbar.style.boxShadow = 'none';
+    }
+  }, { passive: true });
+
+  // ── Mockup live "sync" animation
+  const syncTime = document.querySelector('.mockup-stat:last-child .mockup-stat-value');
+  if (syncTime) {
+    let secs = 3;
+    setInterval(() => {
+      secs = Math.floor(Math.random() * 8) + 1;
+      syncTime.textContent = `há ${secs}s`;
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
