@@ -1,0 +1,15 @@
+{
+  "name": "telahub-monorepo",
+  "version": "1.0.0",
+  "description": "TelaHub — Landing Page B2B SaaS Monorepo (React & Node)",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "backend": "npm run dev --prefix backend",
+    "frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "start": "concurrently \"npm run start --prefix backend\" \"npm run build --prefix frontend\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
