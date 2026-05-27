@@ -135,6 +135,8 @@ const NetworkCanvas = () => {
   return <canvas id="network-canvas" ref={canvasRef} />;
 };
 
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000' : '';
+
 function App() {
   // ==========================================
   // 2. STATE MANAGEMENT & DOCK TRACKING
@@ -178,7 +180,7 @@ function App() {
     // A. Fetch Display Telemetry Data from Node Backend Server
     const fetchTelemetry = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/displays');
+        const res = await fetch(`${API_BASE}/api/displays`);
         if (res.ok) {
           const data = await res.json();
           setTelemetry(data);
@@ -293,7 +295,7 @@ function App() {
     setSubmitStatus({ loading: true, success: false, error: null });
 
     try {
-      const response = await fetch('http://localhost:5000/api/leads', {
+      const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
