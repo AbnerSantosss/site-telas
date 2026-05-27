@@ -9,6 +9,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- GSAP Animations, Lenis Premium Smooth Scroll & Lucide Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     /* ═══════════════════════════════════════════
        DESIGN SYSTEM — TOKENS
@@ -1108,33 +1113,175 @@
     .reveal.delay-4 { transition-delay: 0.4s; }
 
     /* ═══════════════════════════════════════════
-       RESPONSIVE
+       MOBILE INTERACTIVE & RESPONSIVE REFINEMENTS
     ═══════════════════════════════════════════ */
+    #network-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+    }
+
+    /* Spring-loaded active click states */
+    .btn:active, .tab-btn:active, .preco-card:active, .bento-card:active {
+      transform: scale(0.97) !important;
+      transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* CSS Swipe Swiper for Bento Grid on Mobile */
+    .bento-grid-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Mobile-first bottom action dock styling */
+    .mobile-dock {
+      display: none;
+    }
+
     @media (max-width: 900px) {
-      section { padding: 72px 0; }
-      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      section { padding: 64px 0; }
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
       .hero-visual { order: -1; }
       .hero-content { max-width: 100%; }
-      .argumento-grid { grid-template-columns: 1fr; }
-      .bento-grid { grid-template-columns: 1fr; }
-      .bento-card-large { grid-row: auto; }
-      .tab-panel.active { grid-template-columns: 1fr; }
-      .precos-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-      .footer-links { gap: 28px; }
+      .argumento-grid { grid-template-columns: 1fr; gap: 16px; }
+      .tab-panel.active { grid-template-columns: 1fr; gap: 24px; }
+      .precos-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; gap: 24px; }
+      .footer-links { gap: 24px; }
       .nav-links { display: none; }
-      .nav-mobile-toggle { display: flex; }
+      .nav-cta { display: none; }
+      .nav-mobile-toggle { display: none; }
+      
+      /* Bento grid converted to horizontal touch swiper */
+      .bento-grid {
+        display: flex !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        padding: 8px 4px 20px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .bento-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .bento-card {
+        flex: 0 0 88%;
+        min-width: 290px;
+        scroll-snap-align: center;
+      }
+      .bento-card-large {
+        grid-row: auto;
+      }
+      .bento-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: -6px;
+        margin-bottom: 24px;
+      }
+      .bento-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--text-muted);
+        transition: var(--transition);
+      }
+      .bento-dot.active {
+        background: var(--cyan);
+        width: 16px;
+        border-radius: 99px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-dock {
+        display: flex;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: calc(100% - 32px);
+        max-width: 390px;
+        height: 62px;
+        background: rgba(11, 15, 25, 0.78);
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 99px;
+        z-index: 9999;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 8px;
+        box-shadow: 
+          0 20px 40px rgba(0,0,0,0.5),
+          0 0 0 1px rgba(0,240,255,0.05),
+          0 0 30px rgba(0,240,255,0.08);
+        animation: dock-entrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .mobile-dock-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        flex: 1;
+        height: 100%;
+        color: var(--text-secondary);
+        font-size: 0.62rem;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .mobile-dock-btn.active {
+        color: var(--cyan);
+      }
+      .mobile-dock-btn i {
+        width: 18px;
+        height: 18px;
+      }
+      .mobile-dock-cta {
+        background: var(--cyan);
+        color: #0b0f19;
+        border-radius: 99px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 4px 14px rgba(0, 240, 255, 0.3);
+        margin-right: 4px;
+        text-decoration: none;
+      }
+      .mobile-dock-cta i {
+        width: 13px;
+        height: 13px;
+      }
+    }
+
+    @keyframes dock-entrance {
+      from { transform: translate(-50%, 50px); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
     }
 
     @media (max-width: 600px) {
-      h1 { font-size: 2rem; }
+      h1 { font-size: 2.1rem; }
       h2 { font-size: 1.6rem; }
-      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .hero-actions { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
       .btn { width: 100%; justify-content: center; }
       .cta-strip-actions { flex-direction: column; }
+      .hero-float-badge { display: none; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Touch-Interactive Digital Network Canvas Background -->
+  <canvas id="network-canvas"></canvas>
 
 <!-- ────────────────────────────────────────────
      NAVBAR
@@ -1363,85 +1510,94 @@
       <p class="reveal delay-2">Sem funcionalidades decorativas. O que está aqui é o que os gestores de comunicação visual usam no dia a dia.</p>
     </div>
 
-    <div class="bento-grid">
+    <div class="bento-grid-wrapper">
+      <div class="bento-grid" id="bento-carousel">
 
-      <!-- Card GRANDE: Canvas Multi-Cenas -->
-      <div class="bento-card bento-card-large bento-card-glow reveal">
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="14" rx="2"/>
-            <path d="M7 21h10M12 16v5"/>
-          </svg>
-        </div>
-        <h3>Estúdio Canvas Multi-Cenas</h3>
-        <p>
-          Monte layouts livres com controle absoluto de camadas — imagens, vídeos, textos e widgets empilhados na ordem exata que você definir. Configure transições independentes por cena com <strong style="color:var(--text-primary)">Fade ajustável em milissegundos</strong>, de 200ms a 5000ms, sem depender de templates fixos.
-        </p>
-        <p style="margin-top:10px;font-size:0.875rem;color:var(--text-muted)">
-          Suporta orientação horizontal 16:9 e vertical 9:16 no mesmo painel.
-        </p>
-        <div class="canvas-demo">
-          <div class="canvas-demo-label">Camadas da Cena 1 — Cardápio</div>
-          <div class="canvas-layers">
-            <div class="canvas-layer">
-              <div class="layer-thumb lt-img"></div>
-              <span class="layer-name">Imagem de fundo</span>
-              <span class="layer-fade">Fade 300ms</span>
-            </div>
-            <div class="canvas-layer">
-              <div class="layer-thumb lt-text"></div>
-              <span class="layer-name">Título + Preços</span>
-              <span class="layer-fade">Fade 500ms</span>
-            </div>
-            <div class="canvas-layer">
-              <div class="layer-thumb lt-video"></div>
-              <span class="layer-name">Vídeo Promocional</span>
-              <span class="layer-fade">Fade 200ms</span>
+        <!-- Card GRANDE: Canvas Multi-Cenas -->
+        <div class="bento-card bento-card-large bento-card-glow reveal">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="14" rx="2"/>
+              <path d="M7 21h10M12 16v5"/>
+            </svg>
+          </div>
+          <h3>Estúdio Canvas Multi-Cenas</h3>
+          <p>
+            Monte layouts livres com controle absoluto de camadas — imagens, vídeos, textos e widgets empilhados na ordem exata que você definir. Configure transições independentes por cena com <strong style="color:var(--text-primary)">Fade ajustável em milissegundos</strong>, de 200ms a 5000ms, sem depender de templates fixos.
+          </p>
+          <p style="margin-top:10px;font-size:0.875rem;color:var(--text-muted)">
+            Suporta orientação horizontal 16:9 e vertical 9:16 no mesmo painel.
+          </p>
+          <div class="canvas-demo">
+            <div class="canvas-demo-label">Camadas da Cena 1 — Cardápio</div>
+            <div class="canvas-layers">
+              <div class="canvas-layer">
+                <div class="layer-thumb lt-img"></div>
+                <span class="layer-name">Imagem de fundo</span>
+                <span class="layer-fade">Fade 300ms</span>
+              </div>
+              <div class="canvas-layer">
+                <div class="layer-thumb lt-text"></div>
+                <span class="layer-name">Título + Preços</span>
+                <span class="layer-fade">Fade 500ms</span>
+              </div>
+              <div class="canvas-layer">
+                <div class="layer-thumb lt-video"></div>
+                <span class="layer-name">Vídeo Promocional</span>
+                <span class="layer-fade">Fade 200ms</span>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Card MÉDIO: Widgets Corporativos -->
+        <div class="bento-card reveal delay-1">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <h3>Ecossistema de Widgets Corporativos</h3>
+          <p>Blocos dinâmicos prontos para uso imediato. Arraste, configure e publique.</p>
+          <div class="widget-chips">
+            <div class="chip"><span class="chip-dot"></span>Previsão do Tempo</div>
+            <div class="chip"><span class="chip-dot"></span>Relógio & Data</div>
+            <div class="chip"><span class="chip-dot"></span>Notícias RSS</div>
+            <div class="chip"><span class="chip-dot"></span>Letreiro Rolável</div>
+            <div class="chip"><span class="chip-dot"></span>Páginas Web</div>
+            <div class="chip"><span class="chip-dot"></span>Contador Regressivo</div>
+            <div class="chip"><span class="chip-dot"></span>QR Code</div>
+          </div>
+        </div>
+
+        <!-- Card MÉDIO: Integrações de Elite -->
+        <div class="bento-card reveal delay-2">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+            </svg>
+          </div>
+          <h3>Integrações de Elite Seguras</h3>
+          <p>Exiba dados ao vivo de plataformas corporativas diretamente na tela. Nenhuma exportação manual.</p>
+          <div class="integration-row">
+            <div class="integration-badge"><span class="int-icon">📊</span>Power BI</div>
+            <div class="integration-badge"><span class="int-icon">🗂️</span>Airtable</div>
+            <div class="integration-badge"><span class="int-icon">📄</span>Google Docs</div>
+            <div class="integration-badge"><span class="int-icon">📁</span>SharePoint</div>
+            <div class="integration-badge"><span class="int-icon">📑</span>PDF Remoto</div>
+            <div class="integration-badge"><span class="int-icon">📈</span>Google Sheets</div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Card MÉDIO: Widgets Corporativos -->
-      <div class="bento-card reveal delay-1">
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-          </svg>
-        </div>
-        <h3>Ecossistema de Widgets Corporativos</h3>
-        <p>Blocos dinâmicos prontos para uso imediato. Arraste, configure e publique.</p>
-        <div class="widget-chips">
-          <div class="chip"><span class="chip-dot"></span>Previsão do Tempo</div>
-          <div class="chip"><span class="chip-dot"></span>Relógio & Data</div>
-          <div class="chip"><span class="chip-dot"></span>Notícias RSS</div>
-          <div class="chip"><span class="chip-dot"></span>Letreiro Rolável</div>
-          <div class="chip"><span class="chip-dot"></span>Páginas Web</div>
-          <div class="chip"><span class="chip-dot"></span>Contador Regressivo</div>
-          <div class="chip"><span class="chip-dot"></span>QR Code</div>
-        </div>
+      <!-- Scroll pagination dots for mobile Swiper -->
+      <div class="bento-dots" id="bento-dots-container">
+        <span class="bento-dot active"></span>
+        <span class="bento-dot"></span>
+        <span class="bento-dot"></span>
       </div>
-
-      <!-- Card MÉDIO: Integrações de Elite -->
-      <div class="bento-card reveal delay-2">
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
-          </svg>
-        </div>
-        <h3>Integrações de Elite Seguras</h3>
-        <p>Exiba dados ao vivo de plataformas corporativas diretamente na tela. Nenhuma exportação manual.</p>
-        <div class="integration-row">
-          <div class="integration-badge"><span class="int-icon">📊</span>Power BI</div>
-          <div class="integration-badge"><span class="int-icon">🗂️</span>Airtable</div>
-          <div class="integration-badge"><span class="int-icon">📄</span>Google Docs</div>
-          <div class="integration-badge"><span class="int-icon">📁</span>SharePoint</div>
-          <div class="integration-badge"><span class="int-icon">📑</span>PDF Remoto</div>
-          <div class="integration-badge"><span class="int-icon">📈</span>Google Sheets</div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -1871,11 +2027,36 @@
   </div>
 </footer>
 
+<!-- Ergonomic Mobile Floating Dock Action Bar -->
+<div class="mobile-dock">
+  <button class="mobile-dock-btn" onclick="scrollToSec('#recursos')">
+    <i data-lucide="layers"></i>
+    Recursos
+  </button>
+  <button class="mobile-dock-btn" onclick="scrollToSec('#casos')">
+    <i data-lucide="briefcase"></i>
+    Casos
+  </button>
+  <button class="mobile-dock-btn" onclick="scrollToSec('#precos')">
+    <i data-lucide="credit-card"></i>
+    Planos
+  </button>
+  <a href="#hero" class="mobile-dock-cta">
+    <i data-lucide="zap"></i>
+    Grátis
+  </a>
+</div>
+
 <!-- ────────────────────────────────────────────
      JAVASCRIPT
 ──────────────────────────────────────────── -->
 <script>
-  // ── Tabs
+  // ── Initialize Lucide Icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // ── Tabs for Cases of Use
   function switchTab(id) {
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.classList.remove('active');
@@ -1889,36 +2070,256 @@
     document.getElementById('panel-' + id).classList.add('active');
   }
 
-  // ── Intersection Observer for scroll animations
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  reveals.forEach(el => observer.observe(el));
-
-  // ── Navbar scroll effect
+  // ── Navbar Scroll Highlight / Blur Effect
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     if (window.scrollY > 20) {
-      navbar.style.boxShadow = '0 1px 32px rgba(0,0,0,0.4)';
+      navbar.style.boxShadow = '0 1px 32px rgba(0,0,0,0.45)';
     } else {
       navbar.style.boxShadow = 'none';
     }
   }, { passive: true });
 
-  // ── Mockup live "sync" animation
+  // ── Mockup Telemetry Animation
   const syncTime = document.querySelector('.mockup-stat:last-child .mockup-stat-value');
   if (syncTime) {
-    let secs = 3;
     setInterval(() => {
-      secs = Math.floor(Math.random() * 8) + 1;
+      const secs = Math.floor(Math.random() * 7) + 1;
       syncTime.textContent = `há ${secs}s`;
     }, 3000);
+  }
+
+  // ── Touch-Interactive Network Background Canvas (Digital Signage Aura)
+  const canvas = document.getElementById('network-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const resizeCanvas = () => {
+      const dpr = window.devicePixelRatio || 1;
+      width = canvas.width = window.innerWidth * dpr;
+      height = canvas.height = window.innerHeight * dpr;
+      ctx.scale(dpr, dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const particleCount = window.innerWidth < 768 ? 25 : 55;
+    const particles = [];
+    const connectionDist = 115;
+    let mouse = { x: null, y: null, active: false };
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
+        this.vx = (Math.random() - 0.5) * 0.35;
+        this.vy = (Math.random() - 0.5) * 0.35;
+        this.radius = Math.random() * 1.5 + 1;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+        if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    const animateParticles = () => {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        p1.update();
+        p1.draw();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < connectionDist) {
+            const alpha = (1 - dist / connectionDist) * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
+        }
+
+        if (mouse.active && mouse.x !== null && mouse.y !== null) {
+          const dx = p1.x - mouse.x;
+          const dy = p1.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < connectionDist * 1.6) {
+            const alpha = (1 - dist / (connectionDist * 1.6)) * 0.25;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+            ctx.lineWidth = 0.95;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    };
+    animateParticles();
+
+    const trackMouse = (x, y) => {
+      mouse.x = x;
+      mouse.y = y;
+      mouse.active = true;
+    };
+    window.addEventListener('mousemove', (e) => trackMouse(e.clientX, e.clientY));
+    window.addEventListener('mouseleave', () => { mouse.active = false; });
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) trackMouse(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) trackMouse(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('touchend', () => { mouse.active = false; });
+  }
+
+  // ── Lenis Inertia Scroll
+  let lenisInstance;
+  if (typeof Lenis !== 'undefined') {
+    lenisInstance = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.3,
+      infinite: false,
+    });
+
+    const scrollLoop = (time) => {
+      lenisInstance.raf(time);
+      requestAnimationFrame(scrollLoop);
+    };
+    requestAnimationFrame(scrollLoop);
+  }
+
+  // ── Custom Smooth ScrollTo Action
+  window.scrollToSec = (selector) => {
+    if (lenisInstance) {
+      lenisInstance.scrollTo(selector, { offset: -70 });
+    } else {
+      const target = document.querySelector(selector);
+      if (target) {
+        window.scrollTo({
+          top: target.offsetTop - 70,
+          behavior: 'smooth'
+        });
+      }
+    }
+    
+    // Highlight Active Dock Item on Touch
+    document.querySelectorAll('.mobile-dock-btn').forEach(btn => btn.classList.remove('active'));
+    if (selector === '#recursos') document.querySelector('.mobile-dock-btn:nth-child(1)').classList.add('active');
+    if (selector === '#casos') document.querySelector('.mobile-dock-btn:nth-child(2)').classList.add('active');
+    if (selector === '#precos') document.querySelector('.mobile-dock-btn:nth-child(3)').classList.add('active');
+  };
+
+  // ── GSAP ScrollTrigger reveals
+  if (typeof gsap !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('.hero-headline', {
+      duration: 1.1,
+      y: 35,
+      opacity: 0,
+      ease: 'power3.out',
+      stagger: 0.08
+    });
+
+    gsap.from('.hero-subheadline', {
+      duration: 0.9,
+      y: 20,
+      opacity: 0,
+      ease: 'power2.out',
+      delay: 0.25
+    });
+
+    gsap.from('.hero-actions', {
+      duration: 0.8,
+      y: 15,
+      opacity: 0,
+      ease: 'power2.out',
+      delay: 0.4
+    });
+
+    gsap.from('.hero-mockup', {
+      duration: 1.3,
+      scale: 0.96,
+      y: 25,
+      opacity: 0,
+      ease: 'power3.out',
+      delay: 0.3
+    });
+
+    gsap.utils.toArray('.reveal').forEach((elem) => {
+      gsap.from(elem, {
+        scrollTrigger: {
+          trigger: elem,
+          start: 'top 86%',
+          toggleActions: 'play none none none',
+        },
+        duration: 0.8,
+        y: 25,
+        opacity: 0,
+        ease: 'power2.out'
+      });
+    });
+  } else {
+    // Fallback standard animation trigger if GSAP fails
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  }
+
+  // ── Bento Grid Swiper indicator synchronizer
+  const bentoCarousel = document.getElementById('bento-carousel');
+  const bentoDots = document.querySelectorAll('.bento-dot');
+  if (bentoCarousel && bentoDots.length > 0) {
+    bentoCarousel.addEventListener('scroll', () => {
+      const scrollPos = bentoCarousel.scrollLeft;
+      const cardWidth = bentoCarousel.querySelector('.bento-card').clientWidth;
+      const index = Math.round(scrollPos / (cardWidth + 16));
+
+      bentoDots.forEach((dot, idx) => {
+        if (idx === index) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }, { passive: true });
   }
 </script>
 
