@@ -7,9 +7,15 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for React frontend
+// Enable CORS for React frontend (dev + production domains)
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:3080',
+    'https://sitetelahub.proxserverabner.site',
+    'http://sitetelahub.proxserverabner.site'
+  ],
   credentials: true
 }));
 
