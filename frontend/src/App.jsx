@@ -176,6 +176,13 @@ function App() {
   // ==========================================
   const bentoCarouselRef = useRef(null);
 
+  // Re-initialize Lucide icons after EVERY render (needed for conditional content like modal/tabs)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.lucide) {
+      window.lucide.createIcons();
+    }
+  });
+
   useEffect(() => {
     // A. Fetch Display Telemetry Data from Node Backend Server
     const fetchTelemetry = async () => {
@@ -186,7 +193,7 @@ function App() {
           setTelemetry(data);
         }
       } catch (err) {
-        console.log('Backend offline fallback telemetry active.');
+        console.log('Backend offline: usando dados de fallback.');
       }
     };
     fetchTelemetry();
@@ -242,11 +249,6 @@ function App() {
           });
         });
       });
-    }
-
-    // D. Initialize Lucide Icons (in case any loaded later)
-    if (typeof window !== 'undefined' && window.lucide) {
-      window.lucide.createIcons();
     }
 
     return () => {
