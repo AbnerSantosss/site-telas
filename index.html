@@ -1136,6 +1136,55 @@
       width: 100%;
     }
 
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 15, 25, 0.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      z-index: 99;
+      padding: 32px 24px;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+    .mobile-menu-overlay.open {
+      display: flex;
+      animation: menu-slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mobile-menu-overlay a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+    .mobile-menu-overlay a:hover,
+    .mobile-menu-overlay a:active {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.04);
+      border-color: var(--border);
+    }
+    .mobile-menu-cta {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    @keyframes menu-slide-down {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Mobile-first bottom action dock styling */
     .mobile-dock {
       display: none;
@@ -1143,16 +1192,18 @@
 
     @media (max-width: 900px) {
       section { padding: 64px 0; }
-      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-      .hero-visual { order: -1; }
-      .hero-content { max-width: 100%; }
+      .hero-inner { grid-template-columns: 1fr; gap: 36px; }
+      .hero-content { max-width: 100%; text-align: center; }
+      .hero-subheadline { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-trust { justify-content: center; flex-wrap: wrap; }
       .argumento-grid { grid-template-columns: 1fr; gap: 16px; }
       .tab-panel.active { grid-template-columns: 1fr; gap: 24px; }
       .precos-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; gap: 24px; }
       .footer-links { gap: 24px; }
       .nav-links { display: none; }
       .nav-cta { display: none; }
-      .nav-mobile-toggle { display: none; }
+      .nav-mobile-toggle { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); }
       
       /* Bento grid converted to horizontal touch swiper */
       .bento-grid {
@@ -1196,6 +1247,13 @@
     }
 
     @media (max-width: 768px) {
+      .mockup-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+      .footer-brand { max-width: 100%; }
+      .footer-links { justify-content: center; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .preco-card-featured { margin-top: 0 !important; }
+      .hero-trust { flex-wrap: wrap; }
       .mobile-dock {
         display: flex;
         position: fixed;
@@ -1269,12 +1327,40 @@
     }
 
     @media (max-width: 600px) {
-      h1 { font-size: 2.1rem; }
-      h2 { font-size: 1.6rem; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
+      .container { padding: 0 16px; }
+      #hero { padding: 120px 0 48px; min-height: auto; }
+      .hero-inner { gap: 28px; }
       .hero-actions { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
-      .btn { width: 100%; justify-content: center; }
-      .cta-strip-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+      .cta-strip-actions { flex-direction: column; width: 100%; }
+      .cta-strip-actions .btn { width: 100%; justify-content: center; }
       .hero-float-badge { display: none; }
+      .mockup-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .mockup-display-name { font-size: 0.58rem; }
+      .mockup-stat-row { flex-wrap: wrap; }
+      .argumento-card { padding: 24px; }
+      .bento-card { padding: 24px; }
+      .preco-card { padding: 28px 22px; }
+      .tab-content h3 { font-size: 1.2rem; }
+      .tabs-nav { padding: 3px; }
+      .tab-btn { padding: 8px 12px; font-size: 0.78rem; }
+      .footer-links { flex-direction: column; gap: 28px; align-items: center; }
+      .footer-brand { text-align: center; max-width: 100%; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 380px) {
+      h1 { font-size: 1.7rem; }
+      h2 { font-size: 1.3rem; }
+      .mockup-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+      .mockup-body { padding: 12px; }
+      .mockup-stat { padding: 6px 8px; }
+      .mockup-stat-label { font-size: 0.52rem; }
+      .mockup-stat-value { font-size: 0.7rem; }
+      .label { font-size: 10px; padding: 5px 10px; }
+      .btn { padding: 12px 20px; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -1298,15 +1384,15 @@
       TelaHub
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="#recursos">Recursos</a></li>
-      <li><a href="#casos">Casos de Uso</a></li>
-      <li><a href="#precos">Preços</a></li>
-      <li><a href="#" style="color:var(--text-secondary)">Documentação</a></li>
+      <li><a href="#recursos" onclick="scrollToSec('#recursos'); return false;">Recursos</a></li>
+      <li><a href="#casos" onclick="scrollToSec('#casos'); return false;">Casos de Uso</a></li>
+      <li><a href="#precos" onclick="scrollToSec('#precos'); return false;">Preços</a></li>
+      <li><a href="#argumento" onclick="scrollToSec('#argumento'); return false;">Tecnologia</a></li>
     </ul>
     <div class="nav-cta">
       <a href="#" class="btn btn-ghost" style="padding:10px 20px;font-size:0.85rem">Entrar</a>
-      <a href="#" id="nav-cta-btn" class="btn btn-primary" style="padding:10px 20px;font-size:0.85rem">
-        Começar grátis
+      <a href="#precos" id="nav-cta-btn" class="btn btn-primary" style="padding:10px 20px;font-size:0.85rem" onclick="scrollToSec('#precos'); return false;">
+        Começar agora
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
@@ -1315,6 +1401,21 @@
     </button>
   </div>
 </nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobile-menu">
+  <a href="#hero" onclick="closeMobileMenu(); scrollToSec('#hero'); return false;">🏠 Início</a>
+  <a href="#argumento" onclick="closeMobileMenu(); scrollToSec('#argumento'); return false;">⚡ Tecnologia</a>
+  <a href="#recursos" onclick="closeMobileMenu(); scrollToSec('#recursos'); return false;">🧩 Recursos</a>
+  <a href="#casos" onclick="closeMobileMenu(); scrollToSec('#casos'); return false;">💼 Casos de Uso</a>
+  <a href="#precos" onclick="closeMobileMenu(); scrollToSec('#precos'); return false;">💰 Preços</a>
+  <div class="mobile-menu-cta">
+    <a href="#precos" class="btn btn-primary" style="width:100%;justify-content:center" onclick="closeMobileMenu(); scrollToSec('#precos'); return false;">
+      Quero ativar minha tela agora
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</div>
 
 <!-- ────────────────────────────────────────────
      SECTION 1 — HERO
@@ -1328,29 +1429,29 @@
     <div class="hero-inner">
       <!-- Copy -->
       <div class="hero-content">
-        <div class="label animate-in">Digital Signage Profissional</div>
+        <div class="label animate-in">+200 operações ativas no Brasil</div>
 
         <h1 id="hero-heading" class="hero-headline animate-in delay-1">
-          Suas TVs sob<br/>
-          <span class="text-gradient">controle total.</span><br/>
-          Sem hardware extra.
+          Cada TV parada é dinheiro<br/>
+          <span class="text-gradient">que você está queimando.</span><br/>
+          Ative todas. Agora.
         </h1>
 
         <p class="hero-subheadline animate-in delay-2">
-          Crie layouts no <strong style="color:var(--text-primary)">Canvas Livre</strong> — horizontal 16:9 ou vertical 9:16 —, configure transições cena a cena e conecte qualquer TV ao painel em menos de 2 minutos com um código simples de pareamento. Nenhuma caixa preta atrás da tela. Nenhuma licença de hardware proprietário.
+          Enquanto você lê isso, seus concorrentes já usam as TVs deles para vender mais e comunicar melhor. Você ainda depende de pen-drive e técnico presencial? Controle tudo pelo celular, em tempo real — mesmo se a internet cair.
         </p>
 
         <div class="hero-actions animate-in delay-3">
-          <a href="#" id="hero-cta-btn" class="btn btn-primary">
-            Começar grátis agora
+          <a href="#precos" id="hero-cta-btn" class="btn btn-primary" onclick="scrollToSec('#precos'); return false;">
+            Quero ativar minha tela agora
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a href="#recursos" class="btn btn-ghost">Ver todos os recursos</a>
+          <a href="#recursos" class="btn btn-ghost" onclick="scrollToSec('#recursos'); return false;">Ver funcionando em 60 segundos</a>
         </div>
 
         <div class="hero-trust animate-in delay-4">
           <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.78 5.22a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 01-1.06 0L5.72 8.78a.75.75 0 011.06-1.06L8 9.44l2.72-2.72a.75.75 0 011.06 0z"/></svg>
-          Sem cartão de crédito · 14 dias grátis · Cancele quando quiser
+          ⚡ Setup em 2 min · Sem cartão · 14 dias grátis · Cancele quando quiser
         </div>
       </div>
 
@@ -1446,13 +1547,13 @@
   <div class="orb orb-purple" style="width:500px;height:500px;top:0;right:10%;"></div>
   <div class="container">
     <div class="argumento-header">
-      <div class="label reveal">Arquitetura do Produto</div>
+      <div class="label reveal">Tecnologia à Prova de Falha</div>
       <h2 id="argumento-heading" class="reveal delay-1">
-        Construído para funcionar onde<br/>
-        <span class="text-gradient">outras plataformas falham.</span>
+        Tela preta = cliente perdido.<br/>
+        <span class="text-gradient">Isso acaba agora.</span>
       </h2>
       <p class="reveal delay-2">
-        Dois pilares de confiabilidade que protegem sua operação quando a rede oscila ou o time precisa publicar uma atualização urgente.
+        Chega de pen-drives, visitas técnicas e rezar pra internet não cair. O TelaHub foi construído para uma única missão: suas telas NUNCA ficarem pretas.
       </p>
     </div>
 
@@ -1464,14 +1565,14 @@
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
           </svg>
         </div>
-        <h3>Sincronização em Tempo Real — Sem Recarregar</h3>
+        <h3>Publicou? 3 segundos e já está na tela.</h3>
         <p>
-          Alterações feitas no painel chegam aos displays via WebSocket de baixa latência. Não é necessário limpar cache, recarregar o navegador da tela ou recriar widgets do zero.
+          Mudou o preço? Lançou promoção? A tela atualiza sozinha. Sem recarregar navegador, sem limpar cache, sem ligar pro técnico. Você faz do celular — a tela obedece na hora.
         </p>
         <div class="proof-list">
-          <div class="proof-item">Publique uma nova cena e veja a mudança na tela em segundos.</div>
-          <div class="proof-item">Atualize o cardápio, o comunicado ou o relatório sem tocar no dispositivo físico.</div>
-          <div class="proof-item">Controle total via navegador, de qualquer lugar com conexão à internet.</div>
+          <div class="proof-item">Alteração aparece no display em menos de 3 segundos. Testado.</div>
+          <div class="proof-item">Atualize preços e promoções sem interromper a transmissão.</div>
+          <div class="proof-item">Controle total de qualquer lugar — celular, tablet ou computador.</div>
         </div>
       </div>
 
@@ -1482,14 +1583,14 @@
             <path d="M9 12l2 2 4-4M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z"/>
           </svg>
         </div>
-        <h3>Resiliência Offline — Cache Failsafe Local</h3>
+        <h3>Caiu a internet? Suas telas continuam. Sempre.</h3>
         <p>
-          O conteúdo é armazenado localmente no dispositivo após cada sincronização. Se a internet do condomínio ou da loja oscilar ou cair por completo, as mídias e as transições continuam rodando exatamente como programadas.
+          O player baixa tudo automaticamente pro aparelho. Se o Wi-Fi morrer, sua grade roda como se nada tivesse acontecido. Nenhuma tela preta. Nenhuma mensagem de erro. Nenhuma vergonha na frente do cliente.
         </p>
         <div class="proof-list">
-          <div class="proof-item">Zero telas pretas por falha de rede. Zero mensagens de erro visíveis ao público.</div>
-          <div class="proof-item">O player retoma a última playlist completa a partir do ponto correto do loop.</div>
-          <div class="proof-item">Quando a conexão volta, o painel sincroniza as atualizações pendentes automaticamente.</div>
+          <div class="proof-item">Zero telas pretas. Seu público nunca verá erro de rede.</div>
+          <div class="proof-item">Mídias armazenadas localmente na memória do display.</div>
+          <div class="proof-item">Reconexão e sincronização automática quando a internet voltar.</div>
         </div>
       </div>
     </div>
@@ -1505,9 +1606,9 @@
     <div class="section-header">
       <div class="label reveal">Recursos da Plataforma</div>
       <h2 id="recursos-heading" class="reveal delay-1">
-        Cada ferramenta projetada<br/>para operações reais.
+        Menos tempo configurando.<br/>Mais tempo faturando.
       </h2>
-      <p class="reveal delay-2">Sem funcionalidades decorativas. O que está aqui é o que os gestores de comunicação visual usam no dia a dia.</p>
+      <p class="reveal delay-2">Cada ferramenta aqui foi pedida por um gestor real. Nada de feature decorativa. Se está aqui, é porque faz diferença na operação.</p>
     </div>
 
     <div class="bento-grid-wrapper">
@@ -1822,10 +1923,10 @@
     <div class="precos-header">
       <div class="label reveal">Planos e Preços</div>
       <h2 id="precos-heading" class="reveal delay-1">
-        Preço por tela.<br/>
-        <span class="text-gradient">Sem surpresas.</span>
+        Preço por tela. Sem pegadinha.<br/>
+        <span class="text-gradient">Sem surpresa.</span>
       </h2>
-      <p class="reveal delay-2">Você paga pelo número de telas conectadas e ativas. Sem cobrança por usuários, por conteúdo ou por publicação.</p>
+      <p class="reveal delay-2">Você paga pelo número de telas ativas. Sem cobrança por usuário, por conteúdo ou por publicação. O preço que você vê é o preço que você paga.</p>
     </div>
 
     <div class="precos-grid">
@@ -1838,7 +1939,7 @@
           <span class="plan-amount">69</span>
           <span class="plan-period">/mês</span>
         </div>
-        <p class="plan-description">Até 2 telas conectadas. Para pequenos comércios, consultórios e condomínios de torre única que estão começando a digitalizar a comunicação.</p>
+        <p class="plan-description">Perfeito para quem está começando: consultórios, lojas de bairro e condomínios pequenos. 2 telas já são suficientes para eliminar impressos e parar de perder clientes com comunicação desatualizada.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature">
@@ -1870,7 +1971,7 @@
       </div>
 
       <!-- Plano Business — DESTAQUE -->
-      <div class="preco-card preco-card-featured reveal delay-2" style="margin-top:-12px">
+      <div class="preco-card preco-card-featured reveal delay-2">
         <span class="featured-tag">Mais Escolhido</span>
         <p class="plan-name featured">Business</p>
         <div class="plan-price">
@@ -1878,7 +1979,7 @@
           <span class="plan-amount" style="color:var(--text-primary)">149</span>
           <span class="plan-period">/mês</span>
         </div>
-        <p class="plan-description">Até 6 telas conectadas. Para operações com múltiplos pontos de comunicação que exigem confiabilidade e velocidade de resposta.</p>
+        <p class="plan-description">O plano que a maioria escolhe. Múltiplos pontos de comunicação, zero tolerância a tela preta. 6 telas, agendamento avançado e integração com Power BI.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature">
@@ -1916,7 +2017,7 @@
       <div class="preco-card reveal delay-3">
         <p class="plan-name">Enterprise</p>
         <p class="plan-consult">Sob consulta</p>
-        <p class="plan-description">Para redes com mais de 10 telas ou que exigem White Label, integrações customizadas e suporte dedicado com gerente de conta.</p>
+        <p class="plan-description">Para redes com mais de 10 telas que exigem o impossível: White Label com sua marca, API customizada e um gerente de conta que atende seu WhatsApp.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature">
@@ -1956,19 +2057,19 @@
 ──────────────────────────────────────────── -->
 <div class="cta-strip">
   <div class="container">
-    <div class="label" style="margin:0 auto 20px;width:fit-content">Comece Agora</div>
-    <h2 class="reveal">Sua primeira tela ativa<br/>em menos de 5 minutos.</h2>
+    <div class="label" style="margin:0 auto 20px;width:fit-content">Última chamada</div>
+    <h2 class="reveal">Daqui 5 minutos, sua tela pode estar no ar.<br/><span class="text-gradient">Ou você pode continuar com o pen-drive.</span></h2>
     <p class="reveal delay-1">
-      Crie a conta, monte o canvas, gere o código de pareamento e conecte a TV. Sem instalador, sem técnico no local.
+      Crie a conta. Monte o conteúdo. Gere o código. Conecte a TV. Sem instalador, sem técnico, sem enrolação. É literalmente mais fácil do que pedir um Uber.
     </p>
     <div class="cta-strip-actions reveal delay-2">
-      <a href="#" id="strip-cta-btn" class="btn btn-primary" style="font-size:1rem;padding:16px 32px;">
-        Criar conta gratuita
+      <a href="#precos" id="strip-cta-btn" class="btn btn-primary" style="font-size:1rem;padding:16px 32px;" onclick="scrollToSec('#precos'); return false;">
+        Quero ativar agora — é grátis
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="#" class="btn btn-ghost" style="font-size:1rem;padding:16px 32px;">Agendar demonstração</a>
+      <a href="#" class="btn btn-ghost" style="font-size:1rem;padding:16px 32px;">Agendar demonstração ao vivo</a>
     </div>
-    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-muted)">14 dias gratuitos · sem cartão de crédito · cancele quando quiser</p>
+    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-muted)">14 dias grátis · Sem cartão · Cancele quando quiser · +200 operações ativas</p>
   </div>
 </div>
 
@@ -2055,6 +2156,32 @@
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
   }
+
+  // ── Mobile Menu Toggle
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      mobileToggle.setAttribute('aria-expanded', isOpen);
+      if (isOpen) {
+        mobileToggle.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileToggle.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  window.closeMobileMenu = () => {
+    if (mobileMenu && mobileToggle) {
+      mobileMenu.classList.remove('open');
+      mobileToggle.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      mobileToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+  };
 
   // ── Tabs for Cases of Use
   function switchTab(id) {
