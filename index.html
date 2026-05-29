@@ -14,31 +14,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* ═══════════════════════════════════════════
-       DESIGN SYSTEM — TOKENS
-    ═══════════════════════════════════════════ */
+    @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
     :root {
-      --bg-primary:    #0B0F19;
-      --bg-secondary:  #0F1525;
-      --bg-card:       rgba(15, 21, 37, 0.7);
-      --bg-card-hover: rgba(20, 28, 50, 0.85);
-      --border:        rgba(255,255,255,0.07);
-      --border-active: rgba(0, 240, 255, 0.35);
+      --bg-primary:    #1C1D22; /* Cinza Corporativo */
+      --bg-secondary:  #2D3139; /* Cinza Mineral */
+      --bg-card:       rgba(45, 49, 57, 0.7);
+      --bg-card-hover: rgba(45, 49, 57, 0.85);
+      --border:        rgba(255, 255, 255, 0.1); /* border-white/10 */
+      --border-active: rgba(124, 58, 237, 0.35); /* Violeta Tecnológico */
 
-      --cyan:          #00F0FF;
-      --cyan-dim:      rgba(0, 240, 255, 0.12);
-      --cyan-glow:     0 0 24px rgba(0, 240, 255, 0.35);
+      --cyan:          #7C3AED; /* Violeta Tecnológico */
+      --cyan-dim:      rgba(124, 58, 237, 0.12);
+      --cyan-glow:     0 0 24px rgba(124, 58, 237, 0.35);
 
-      --text-primary:  #F0F4FF;
-      --text-secondary:#8B92A8;
-      --text-muted:    #4B5270;
+      --text-primary:  #F3F4F6; /* Branco Suave */
+      --text-secondary:#9CA3AF; /* Cinza Neutro */
+      --text-muted:    #6B7280;
 
       --radius-sm:     8px;
       --radius-md:     14px;
       --radius-lg:     20px;
       --radius-xl:     28px;
 
-      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --font: 'Satoshi', 'Space Grotesk', system-ui, -apple-system, sans-serif;
       --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -73,10 +73,13 @@
       content: '';
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+        radial-gradient(rgba(255, 255, 255, 0.05) 1.2px, transparent 1.2px);
+      background-size: auto, 24px 24px;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.4;
+      opacity: 1;
     }
 
     /* ═══════════════════════════════════════════

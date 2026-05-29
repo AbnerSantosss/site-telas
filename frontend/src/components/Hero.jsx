@@ -16,18 +16,18 @@ const Hero = ({
       <div className="container">
         <div className="hero-inner">
           <div className="hero-content">
-            <div className="label animate-in">Digital Signage de Alta Performance</div>
+            <div className="label animate-in">+200 operações ativas no Brasil</div>
             <h1 id="hero-heading" className="hero-headline animate-in">
-              Transforme qualquer TV em um<br />
-              <span className="text-gradient">canal de vendas.</span><br />
-              Sem hardware proprietário.
+              Cada TV parada é dinheiro<br />
+              <span className="text-gradient">que você está queimando.</span><br />
+              Ative todas. Agora.
             </h1>
             <p className="hero-subheadline animate-in">
-              Controle e atualize cardápios, avisos e relatórios em tempo real, diretamente pelo seu navegador. Use as TVs que você já tem, economize com instaladores e mantenha tudo rodando mesmo se a internet cair.
+              Enquanto você lê isso, seus concorrentes já usam as TVs deles para vender mais e comunicar melhor. Você ainda depende de pen-drive e técnico presencial? Controle tudo pelo celular, em tempo real — mesmo se a internet cair.
             </p>
             <div className="hero-actions animate-in">
               <button onClick={() => triggerConversionModal('Starter')} className="btn btn-primary">
-                Criar Canal Grátis
+                Quero ativar minha tela agora
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
                   viewBox="0 0 24 24" 
@@ -43,7 +43,7 @@ const Hero = ({
                 </svg>
               </button>
               <button onClick={() => scrollToSection('#recursos', 'recursos')} className="btn btn-ghost">
-                Ver recursos da plataforma
+                Ver funcionando em 60 segundos
               </button>
             </div>
             <div className="hero-trust animate-in">

@@ -27,7 +27,7 @@ const Pricing = ({ triggerConversionModal }) => {
               <span className="plan-amount">69</span>
               <span className="plan-period">/mês</span>
             </div>
-            <p className="plan-description">Ideal para começar a digitalizar sua comunicação com até 2 telas ligadas. Sem taxas escondidas.</p>
+            <p className="plan-description">Perfeito para quem está começando: consultórios, lojas de bairro e condomínios pequenos. 2 telas já são suficientes para eliminar impressos e parar de perder clientes com comunicação desatualizada.</p>
             <div className="plan-divider"></div>
             
             <ul className="plan-features">
@@ -94,7 +94,7 @@ const Pricing = ({ triggerConversionModal }) => {
               <span className="plan-amount" style={{ color: 'var(--text-primary)' }}>149</span>
               <span className="plan-period">/mês</span>
             </div>
-            <p className="plan-description">O plano ideal para empresas que exigem máxima conversão, biblioteca de transições e integrações com bancos de dados.</p>
+            <p className="plan-description">O plano que a maioria escolhe. Múltiplos pontos de comunicação, zero tolerância a tela preta. 6 telas, agendamento avançado e integração com Power BI.</p>
             <div className="plan-divider"></div>
             
             <ul className="plan-features">
@@ -173,7 +173,7 @@ const Pricing = ({ triggerConversionModal }) => {
           <div className="preco-card reveal">
             <p className="plan-name">Enterprise</p>
             <p className="plan-consult">Sob consulta</p>
-            <p className="plan-description">Para redes com mais de 10 telas, White Label ou integrações customizadas sob demanda.</p>
+            <p className="plan-description">Para redes com mais de 10 telas que exigem o impossível: White Label com sua marca, API customizada e um gerente de conta que atende seu WhatsApp.</p>
             <div className="plan-divider"></div>
             
             <ul className="plan-features">
