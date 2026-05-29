@@ -29,6 +29,10 @@
       --cyan-dim:      rgba(124, 58, 237, 0.12);
       --cyan-glow:     0 0 24px rgba(124, 58, 237, 0.35);
 
+      --emerald:       #10B981;
+      --emerald-dim:   rgba(16, 185, 129, 0.12);
+      --emerald-border: rgba(16, 185, 129, 0.35);
+
       --text-primary:  #F3F4F6; /* Branco Suave */
       --text-secondary:#9CA3AF; /* Cinza Neutro */
       --text-muted:    #6B7280;
@@ -88,11 +92,11 @@
     .container {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 16px;
       position: relative;
       z-index: 1;
     }
-    section { padding: 100px 0; position: relative; }
+    section { padding: 64px 0; position: relative; }
 
     /* ═══════════════════════════════════════════
        GLOW ORBS (background atmosphere)
@@ -104,7 +108,7 @@
       z-index: 0;
       filter: blur(90px);
     }
-    .orb-cyan  { background: rgba(0, 240, 255, 0.07); }
+    .orb-cyan  { background: rgba(124, 58, 237, 0.07); }
     .orb-blue  { background: rgba(60, 80, 200, 0.06); }
     .orb-purple{ background: rgba(140, 60, 220, 0.05); }
 
@@ -135,9 +139,9 @@
     }
 
     h1, h2, h3 { line-height: 1.18; letter-spacing: -0.025em; }
-    h1 { font-size: clamp(2.2rem, 3.8vw, 3.4rem); font-weight: 800; }
-    h2 { font-size: clamp(1.7rem, 2.8vw, 2.2rem); font-weight: 750; }
-    h3 { font-size: clamp(1.1rem, 1.8vw, 1.35rem); font-weight: 650; }
+    h1 { font-size: clamp(2rem, 5vw + 1rem, 3.8rem); font-weight: 800; text-wrap: balance; }
+    h2 { font-size: clamp(1.5rem, 3vw + 0.75rem, 2.6rem); font-weight: 750; text-wrap: balance; }
+    h3 { font-size: clamp(1.05rem, 1.5vw + 0.5rem, 1.35rem); font-weight: 650; }
 
     .text-gradient {
       background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
@@ -167,12 +171,12 @@
     }
     .btn-primary {
       background: var(--cyan);
-      color: #0B0F19;
-      box-shadow: 0 0 28px rgba(0, 240, 255, 0.3);
+      color: #fff;
+      box-shadow: 0 0 28px rgba(124, 58, 237, 0.3);
     }
     .btn-primary:hover {
-      background: #33f4ff;
-      box-shadow: 0 0 44px rgba(0, 240, 255, 0.5);
+      background: #8B5CF6;
+      box-shadow: 0 0 44px rgba(124, 58, 237, 0.5);
       transform: translateY(-1px);
     }
     .btn-ghost {
@@ -244,39 +248,50 @@
        SECTION 1 — HERO
     ═══════════════════════════════════════════ */
     #hero {
-      padding: 160px 0 80px;
-      min-height: 100vh;
+      padding: 120px 0 48px;
+      min-height: auto;
       display: flex;
       align-items: center;
     }
     .hero-inner {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 72px;
+      grid-template-columns: 1fr;
+      gap: 36px;
       align-items: center;
     }
-    .hero-content { max-width: 600px; }
+    .hero-content { max-width: 100%; text-align: center; }
     .hero-headline { margin-bottom: 24px; }
     .hero-subheadline {
-      font-size: 1.05rem;
+      font-size: clamp(0.9rem, 1vw + 0.5rem, 1.1rem);
       color: var(--text-secondary);
       line-height: 1.7;
       margin-bottom: 36px;
       max-width: 480px;
+      text-wrap: pretty;
+      margin-left: auto;
+      margin-right: auto;
     }
     .hero-actions {
       display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 12px;
+      flex-direction: column;
+      width: 100%;
+    }
+    .hero-actions .btn {
+      width: 100%;
+      justify-content: center;
+      min-height: 48px;
     }
     .hero-trust {
       margin-top: 24px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-size: 0.78rem;
       color: var(--text-muted);
+      flex-wrap: wrap;
     }
     .hero-trust svg { color: var(--cyan); width: 14px; height: 14px; }
 
@@ -290,9 +305,9 @@
       overflow: hidden;
       border: 1px solid var(--border);
       box-shadow:
-        0 0 0 1px rgba(0,240,255,0.08),
+        0 0 0 1px rgba(124,58,237,0.08),
         0 40px 80px rgba(0,0,0,0.6),
-        0 0 80px rgba(0,240,255,0.06);
+        0 0 80px rgba(124,58,237,0.06);
     }
     .hero-mockup-bar {
       background: #0d1220;
@@ -356,8 +371,8 @@
       transition: var(--transition);
     }
     .mockup-display-card:hover {
-      border-color: rgba(0,240,255,0.2);
-      background: rgba(0,240,255,0.03);
+      border-color: rgba(124,58,237,0.2);
+      background: rgba(124,58,237,0.03);
     }
     .mockup-screen {
       width: 100%;
@@ -400,9 +415,9 @@
       text-transform: uppercase;
     }
     .badge-online {
-      background: rgba(0,240,255,0.12);
+      background: rgba(124,58,237,0.12);
       color: var(--cyan);
-      border: 1px solid rgba(0,240,255,0.3);
+      border: 1px solid rgba(124,58,237,0.3);
       animation: pulse-badge 2s ease-in-out infinite;
     }
     .badge-offline {
@@ -460,7 +475,7 @@
     #argumento {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.015), transparent);
+      background: linear-gradient(180deg, transparent, rgba(124,58,237,0.015), transparent);
     }
     .argumento-header {
       text-align: center;
@@ -476,14 +491,14 @@
 
     .argumento-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
     .argumento-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 40px;
+      padding: 24px;
       position: relative;
       overflow: hidden;
       transition: border-color var(--transition), transform var(--transition);
@@ -542,7 +557,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2300F0FF'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%237C3AED'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z'/%3E%3C/svg%3E");
       background-size: 10px;
       background-repeat: no-repeat;
       background-position: center;
@@ -565,8 +580,8 @@
 
     .bento-grid {
       display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      grid-template-rows: auto auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
       gap: 16px;
     }
 
@@ -574,15 +589,15 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 36px;
+      padding: 24px;
       position: relative;
       overflow: hidden;
       transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
     }
     .bento-card:hover {
-      border-color: rgba(0,240,255,0.2);
+      border-color: rgba(124,58,237,0.2);
       transform: translateY(-2px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(0,240,255,0.04);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(124,58,237,0.04);
     }
 
     /* Large card — spans 2 rows */
@@ -597,7 +612,7 @@
       right: -20%;
       width: 300px;
       height: 300px;
-      background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -690,7 +705,7 @@
       transition: var(--transition);
     }
     .chip:hover {
-      border-color: rgba(0,240,255,0.25);
+      border-color: rgba(124,58,237,0.25);
       color: var(--text-primary);
     }
     .chip-dot {
@@ -720,7 +735,7 @@
       transition: var(--transition);
     }
     .integration-badge:hover {
-      border-color: rgba(0,240,255,0.2);
+      border-color: rgba(124,58,237,0.2);
       color: var(--text-primary);
     }
     .int-icon { font-size: 0.9rem; }
@@ -729,7 +744,7 @@
        SECTION 4 — TABS DE CASOS DE USO
     ═══════════════════════════════════════════ */
     #casos {
-      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.01), transparent);
+      background: linear-gradient(180deg, transparent, rgba(124,58,237,0.01), transparent);
     }
     .casos-header {
       text-align: center;
@@ -771,14 +786,14 @@
     }
     .tab-btn:hover { color: var(--text-secondary); }
     .tab-btn.active {
-      background: rgba(0,240,255,0.1);
+      background: rgba(124,58,237,0.1);
       color: var(--cyan);
-      border: 1px solid rgba(0,240,255,0.2);
+      border: 1px solid rgba(124,58,237,0.2);
     }
     .tab-icon { font-size: 1rem; }
 
     .tab-panel { display: none; }
-    .tab-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    .tab-panel.active { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }
 
     .tab-content { }
     .tab-content h3 { font-size: 1.5rem; margin-bottom: 14px; line-height: 1.25; }
@@ -805,7 +820,7 @@
       flex-shrink: 0;
       border-radius: 6px;
       background: var(--cyan-dim);
-      border: 1px solid rgba(0,240,255,0.15);
+      border: 1px solid rgba(124,58,237,0.15);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -851,7 +866,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(0,240,255,0.04) 0%, transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(124,58,237,0.04) 0%, transparent 70%);
     }
     .tv-screen-content {
       position: absolute;
@@ -882,7 +897,7 @@
        SECTION 5 — PREÇOS
     ═══════════════════════════════════════════ */
     #precos {
-      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.012), transparent);
+      background: linear-gradient(180deg, transparent, rgba(124,58,237,0.012), transparent);
     }
     .precos-header {
       text-align: center;
@@ -893,9 +908,11 @@
 
     .precos-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: 1fr;
+      gap: 24px;
       align-items: start;
+      max-width: 420px;
+      margin: 0 auto;
     }
     .preco-card {
       background: rgba(15, 21, 37, 0.5);
@@ -912,18 +929,18 @@
 
     /* Glassmorphic featured card */
     .preco-card-featured {
-      border-color: rgba(0,240,255,0.35);
+      border-color: rgba(124,58,237,0.35);
       box-shadow:
-        0 0 0 1px rgba(0,240,255,0.15),
+        0 0 0 1px rgba(124,58,237,0.15),
         0 24px 64px rgba(0,0,0,0.4),
-        0 0 60px rgba(0,240,255,0.08);
-      background: rgba(0, 240, 255, 0.04);
+        0 0 60px rgba(124,58,237,0.08);
+      background: rgba(124, 58, 237, 0.04);
     }
     .preco-card-featured:hover {
       box-shadow:
-        0 0 0 1px rgba(0,240,255,0.3),
+        0 0 0 1px rgba(124,58,237,0.3),
         0 32px 80px rgba(0,0,0,0.5),
-        0 0 80px rgba(0,240,255,0.12);
+        0 0 80px rgba(124,58,237,0.12);
     }
 
     .featured-tag {
@@ -937,7 +954,7 @@
       padding: 4px 10px;
       border-radius: 99px;
       background: var(--cyan);
-      color: #0B0F19;
+      color: #fff;
     }
 
     .plan-name {
@@ -979,7 +996,7 @@
       background: var(--border);
       margin-bottom: 22px;
     }
-    .preco-card-featured .plan-divider { background: rgba(0,240,255,0.15); }
+    .preco-card-featured .plan-divider { background: rgba(124,58,237,0.15); }
 
     .plan-features {
       display: flex;
@@ -999,7 +1016,7 @@
       flex-shrink: 0;
       border-radius: 50%;
       background: var(--cyan-dim);
-      border: 1px solid rgba(0,240,255,0.25);
+      border: 1px solid rgba(124,58,237,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1012,12 +1029,12 @@
     }
     .btn-plan-featured {
       background: var(--cyan);
-      color: #0B0F19;
+      color: #fff;
       font-weight: 700;
-      box-shadow: 0 0 28px rgba(0,240,255,0.25);
+      box-shadow: 0 0 28px rgba(124,58,237,0.25);
     }
     .btn-plan-featured:hover {
-      box-shadow: 0 0 44px rgba(0,240,255,0.45);
+      box-shadow: 0 0 44px rgba(124,58,237,0.45);
       transform: translateY(-1px);
     }
     .btn-plan-outline {
@@ -1047,10 +1064,15 @@
     }
     .cta-strip-actions {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+    .cta-strip-actions .btn {
+      width: 100%;
+      justify-content: center;
     }
 
     /* ═══════════════════════════════════════════
@@ -1213,135 +1235,113 @@
       display: none;
     }
 
-    @media (max-width: 900px) {
-      section { padding: 64px 0; }
-      .hero-inner { grid-template-columns: 1fr; gap: 36px; }
-      .hero-content { max-width: 100%; text-align: center; }
-      .hero-subheadline { margin-left: auto; margin-right: auto; }
-      .hero-actions { justify-content: center; }
-      .hero-trust { justify-content: center; flex-wrap: wrap; }
-      .argumento-grid { grid-template-columns: 1fr; gap: 16px; }
-      .tab-panel.active { grid-template-columns: 1fr; gap: 24px; }
-      .precos-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; gap: 24px; }
-      .footer-links { gap: 24px; }
-      .nav-links { display: none; }
-      .nav-cta { display: none; }
-      .nav-mobile-toggle { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); }
-      
-      /* Bento grid converted to horizontal touch swiper */
-      .bento-grid {
-        display: flex !important;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 16px;
-        padding: 8px 4px 20px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-      .bento-grid::-webkit-scrollbar {
-        display: none;
-      }
-      .bento-card {
-        flex: 0 0 88%;
-        min-width: 290px;
-        scroll-snap-align: center;
-      }
-      .bento-card-large {
-        grid-row: auto;
-      }
-      .bento-dots {
-        display: flex;
-        justify-content: center;
-        gap: 6px;
-        margin-top: -6px;
-        margin-bottom: 24px;
-      }
-      .bento-dot {
-        width: 6px; height: 6px;
-        border-radius: 50%;
-        background: var(--text-muted);
-        transition: var(--transition);
-      }
-      .bento-dot.active {
-        background: var(--cyan);
-        width: 16px;
-        border-radius: 99px;
-      }
+    /* ═══════════════════════════════════════════
+       MOBILE BASE — already set above (1 col grids, stacked layout)
+       Now adding min-width progressive enhancement
+    ═══════════════════════════════════════════ */
+
+    /* Hide desktop nav, show mobile toggle by default */
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .nav-mobile-toggle { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); }
+
+    /* Float badge hidden on mobile */
+    .hero-float-badge { display: none; }
+
+    /* Bento dots hidden on desktop by default */
+    .bento-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: -6px;
+      margin-bottom: 24px;
+    }
+    .bento-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: var(--transition);
+    }
+    .bento-dot.active {
+      background: var(--cyan);
+      width: 16px;
+      border-radius: 99px;
     }
 
-    @media (max-width: 768px) {
-      .mockup-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
-      .footer-brand { max-width: 100%; }
-      .footer-links { justify-content: center; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      .preco-card-featured { margin-top: 0 !important; }
-      .hero-trust { flex-wrap: wrap; }
-      .mobile-dock {
-        display: flex;
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: calc(100% - 32px);
-        max-width: 390px;
-        height: 62px;
-        background: rgba(11, 15, 25, 0.78);
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 99px;
-        z-index: 9999;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 8px;
-        box-shadow: 
-          0 20px 40px rgba(0,0,0,0.5),
-          0 0 0 1px rgba(0,240,255,0.05),
-          0 0 30px rgba(0,240,255,0.08);
-        animation: dock-entrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-      .mobile-dock-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 3px;
-        flex: 1;
-        height: 100%;
-        color: var(--text-secondary);
-        font-size: 0.62rem;
-        font-weight: 600;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-      .mobile-dock-btn.active {
-        color: var(--cyan);
-      }
-      .mobile-dock-btn i {
-        width: 18px;
-        height: 18px;
-      }
-      .mobile-dock-cta {
-        background: var(--cyan);
-        color: #0b0f19;
-        border-radius: 99px;
-        padding: 8px 16px;
-        font-weight: 700;
-        font-size: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        box-shadow: 0 4px 14px rgba(0, 240, 255, 0.3);
-        margin-right: 4px;
-        text-decoration: none;
-      }
-      .mobile-dock-cta i {
-        width: 13px;
-        height: 13px;
-      }
+    /* Footer mobile stacking */
+    .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+    .footer-brand { max-width: 100%; text-align: center; }
+    .footer-links { justify-content: center; flex-direction: column; gap: 28px; align-items: center; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+
+    /* Mobile Dock (shows on small screens) */
+    .mobile-dock {
+      display: flex;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      width: calc(100% - 32px);
+      max-width: 390px;
+      height: 62px;
+      background: rgba(11, 15, 25, 0.78);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      z-index: 9999;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(124,58,237,0.05),
+        0 0 30px rgba(124,58,237,0.08);
+      animation: dock-entrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .mobile-dock-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      flex: 1;
+      height: 100%;
+      min-height: 44px;
+      min-width: 44px;
+      color: var(--text-secondary);
+      font-size: 0.62rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .mobile-dock-btn.active {
+      color: var(--cyan);
+    }
+    .mobile-dock-btn i {
+      width: 18px;
+      height: 18px;
+    }
+    .mobile-dock-cta {
+      background: var(--cyan);
+      color: #fff;
+      border-radius: 99px;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+      margin-right: 4px;
+      text-decoration: none;
+      min-height: 44px;
+    }
+    .mobile-dock-cta i {
+      width: 13px;
+      height: 13px;
     }
 
     @keyframes dock-entrance {
@@ -1349,34 +1349,8 @@
       to { transform: translate(-50%, 0); opacity: 1; }
     }
 
-    @media (max-width: 600px) {
-      h1 { font-size: 1.9rem; }
-      h2 { font-size: 1.5rem; }
-      .container { padding: 0 16px; }
-      #hero { padding: 120px 0 48px; min-height: auto; }
-      .hero-inner { gap: 28px; }
-      .hero-actions { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
-      .hero-actions .btn { width: 100%; justify-content: center; }
-      .cta-strip-actions { flex-direction: column; width: 100%; }
-      .cta-strip-actions .btn { width: 100%; justify-content: center; }
-      .hero-float-badge { display: none; }
-      .mockup-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
-      .mockup-display-name { font-size: 0.58rem; }
-      .mockup-stat-row { flex-wrap: wrap; }
-      .argumento-card { padding: 24px; }
-      .bento-card { padding: 24px; }
-      .preco-card { padding: 28px 22px; }
-      .tab-content h3 { font-size: 1.2rem; }
-      .tabs-nav { padding: 3px; }
-      .tab-btn { padding: 8px 12px; font-size: 0.78rem; }
-      .footer-links { flex-direction: column; gap: 28px; align-items: center; }
-      .footer-brand { text-align: center; max-width: 100%; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-    }
-
+    /* ── Small screens fine-tuning (< 380px) ── */
     @media (max-width: 380px) {
-      h1 { font-size: 1.7rem; }
-      h2 { font-size: 1.3rem; }
       .mockup-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
       .mockup-body { padding: 12px; }
       .mockup-stat { padding: 6px 8px; }
@@ -1384,6 +1358,97 @@
       .mockup-stat-value { font-size: 0.7rem; }
       .label { font-size: 10px; padding: 5px 10px; }
       .btn { padding: 12px 20px; font-size: 0.85rem; }
+    }
+
+    /* ── SM Breakpoint (≥ 640px) ── */
+    @media (min-width: 640px) {
+      .container { padding: 0 24px; }
+      section { padding: 80px 0; }
+      .hero-actions {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+      }
+      .hero-actions .btn {
+        width: auto;
+      }
+      .cta-strip-actions {
+        flex-direction: row;
+        width: auto;
+      }
+      .cta-strip-actions .btn {
+        width: auto;
+      }
+      .argumento-card { padding: 32px; }
+      .bento-card { padding: 28px; }
+    }
+
+    /* ── MD Breakpoint (≥ 768px) ── */
+    @media (min-width: 768px) {
+      section { padding: 100px 0; }
+      .container { padding: 0 24px; }
+
+      /* Restore desktop nav */
+      .nav-links { display: flex; }
+      .nav-cta { display: flex; }
+      .nav-mobile-toggle { display: none; }
+
+      /* Hide mobile dock */
+      .mobile-dock { display: none; }
+
+      /* Hero 2-column */
+      #hero { padding: 160px 0 80px; min-height: 100vh; }
+      .hero-inner { grid-template-columns: 1fr 1fr; gap: 48px; }
+      .hero-content { max-width: 600px; text-align: left; }
+      .hero-subheadline { margin-left: 0; margin-right: 0; }
+      .hero-actions {
+        justify-content: flex-start;
+      }
+      .hero-trust { justify-content: flex-start; }
+      .hero-float-badge { display: flex; }
+
+      /* Argumento 2-column */
+      .argumento-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .argumento-card { padding: 40px; }
+
+      /* Tab panels 2-column */
+      .tab-panel.active { grid-template-columns: 1fr 1fr; gap: 32px; }
+
+      /* Footer side-by-side */
+      .footer-inner { flex-direction: row; align-items: flex-start; text-align: left; }
+      .footer-brand { max-width: 280px; text-align: left; }
+      .footer-links { flex-direction: row; gap: 48px; }
+      .footer-bottom { flex-direction: row; text-align: left; }
+
+      /* Bento dots hidden on desktop */
+      .bento-dots { display: none; }
+    }
+
+    /* ── LG Breakpoint (≥ 1024px) ── */
+    @media (min-width: 1024px) {
+      .hero-inner { gap: 72px; }
+
+      /* Bento Grid — asymmetric layout */
+      .bento-grid {
+        grid-template-columns: 1.6fr 1fr;
+        grid-template-rows: auto auto;
+      }
+      .bento-card { padding: 36px; }
+      .bento-card-large { grid-row: span 2; }
+
+      /* Pricing 3-column */
+      .precos-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: none;
+        gap: 20px;
+      }
+      .preco-card-featured {
+        transform: scale(1.03);
+      }
+      .preco-card-featured:hover {
+        transform: scale(1.05);
+      }
     }
   </style>
 </head>
@@ -1452,20 +1517,23 @@
     <div class="hero-inner">
       <!-- Copy -->
       <div class="hero-content">
-        <div class="label animate-in">+200 operações ativas no Brasil</div>
+        <div class="label animate-in" style="background:var(--emerald-dim);border-color:var(--emerald-border);color:var(--emerald)">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 8px var(--emerald)"></span>
+          +200 operações ativas no Brasil
+        </div>
 
         <h1 id="hero-heading" class="hero-headline animate-in delay-1">
-          Controle todas as suas telas.<br/>
-          <span class="text-gradient">De qualquer lugar, em tempo real.</span>
+          Cada TV parada é dinheiro que você está queimando.<br/>
+          <span class="text-gradient">Ative todas. Agora.</span>
         </h1>
 
         <p class="hero-subheadline animate-in delay-2">
-          O TelaHub transforma qualquer TV ou display comum em um canal de comunicação inteligente. Gerencie avisos em elevadores, menus digitais, murais corporativos e sinalização para shoppings ou varejo direto pelo celular, com resiliência offline failsafe garantida.
+          Aposente os pen-drives e as telas pretas. Transforme qualquer monitor em uma central de comunicação inteligente, atualizada via celular, de qualquer lugar do mundo.
         </p>
 
         <div class="hero-actions animate-in delay-3">
           <a href="#precos" id="hero-cta-btn" class="btn btn-primary" onclick="scrollToSec('#precos'); return false;">
-            Quero ativar minha tela agora
+            Começar Agora
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
           <a href="#recursos" class="btn btn-ghost" onclick="scrollToSec('#recursos'); return false;">Ver funcionando em 60 segundos</a>
@@ -1571,8 +1639,8 @@
     <div class="argumento-header">
       <div class="label reveal">Tecnologia à Prova de Falha</div>
       <h2 id="argumento-heading" class="reveal delay-1">
-        Tela preta = cliente perdido.<br/>
-        <span class="text-gradient">Isso acaba agora.</span>
+        Sua tela vende, informa<br/>
+        <span class="text-gradient">ou só gasta energia?</span>
       </h2>
       <p class="reveal delay-2">
         Chega de pen-drives, visitas técnicas e rezar pra internet não cair. O TelaHub foi construído para uma única missão: suas telas NUNCA ficarem pretas.
@@ -1587,9 +1655,9 @@
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
           </svg>
         </div>
-        <h3>Publicou? 3 segundos e já está na tela.</h3>
+        <h3>Atualização em 3 Segundos</h3>
         <p>
-          Mudou o preço? Lançou promoção? A tela atualiza sozinha. Sem recarregar navegador, sem limpar cache, sem ligar pro técnico. Você faz do celular — a tela obedece na hora.
+          Mude o preço ou o aviso no celular, e a tela física atualiza antes de você guardar o telefone no bolso. Sem recarregar a página.
         </p>
         <div class="proof-list">
           <div class="proof-item">Alteração aparece no display em menos de 3 segundos. Testado.</div>
@@ -1605,9 +1673,9 @@
             <path d="M9 12l2 2 4-4M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z"/>
           </svg>
         </div>
-        <h3>Caiu a internet? Suas telas continuam. Sempre.</h3>
+        <h3>Internet caiu? A tela continua.</h3>
         <p>
-          O player baixa tudo automaticamente pro aparelho. Se o Wi-Fi morrer, sua grade roda como se nada tivesse acontecido. Nenhuma tela preta. Nenhuma mensagem de erro. Nenhuma vergonha na frente do cliente.
+          Nosso cache inteligente salva as mídias na própria TV. Ninguém nunca verá uma mensagem de “Sem Conexão”.
         </p>
         <div class="proof-list">
           <div class="proof-item">Zero telas pretas. Seu público nunca verá erro de rede.</div>
@@ -1644,9 +1712,9 @@
               <path d="M7 21h10M12 16v5"/>
             </svg>
           </div>
-          <h3>Estúdio Canvas Multi-Cenas</h3>
+          <h3>Canvas Livre. Vertical ou Horizontal.</h3>
           <p>
-            Monte layouts livres com controle absoluto de camadas — imagens, vídeos, textos e widgets empilhados na ordem exata que você definir. Configure transições independentes por cena com <strong style="color:var(--text-primary)">Fade ajustável em milissegundos</strong>, de 200ms a 5000ms, sem depender de templates fixos.
+            Não somos presos a templates engessados. Monte layouts livres com controle absoluto de camadas — imagens, vídeos, textos e widgets empilhados na ordem exata que você definir. Configure transições independentes por cena com <strong style="color:var(--text-primary)">Fade ajustável em milissegundos</strong>.
           </p>
           <p style="margin-top:10px;font-size:0.875rem;color:var(--text-muted)">
             Suporta orientação horizontal 16:9 e vertical 9:16 no mesmo painel.
@@ -1681,8 +1749,8 @@
               <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
             </svg>
           </div>
-          <h3>Ecossistema de Widgets Corporativos</h3>
-          <p>Blocos dinâmicos prontos para uso imediato. Arraste, configure e publique.</p>
+          <h3>Automação Pronta</h3>
+          <p>Previsão do tempo, Relógio, Letreiro de Notícias e QR Code dinâmico. Blocos prontos para uso imediato.</p>
           <div class="widget-chips">
             <div class="chip"><span class="chip-dot"></span>Previsão do Tempo</div>
             <div class="chip"><span class="chip-dot"></span>Relógio & Data</div>
@@ -1701,8 +1769,8 @@
               <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
             </svg>
           </div>
-          <h3>Integrações de Elite Seguras</h3>
-          <p>Exiba dados ao vivo de plataformas corporativas diretamente na tela. Nenhuma exportação manual.</p>
+          <h3>Dados Vivos</h3>
+          <p>Conexão direta com Power BI, Planilhas Google e Airtable. Exiba dados ao vivo sem exportação manual.</p>
           <div class="integration-row">
             <div class="integration-badge"><span class="int-icon">📊</span>Power BI</div>
             <div class="integration-badge"><span class="int-icon">🗂️</span>Airtable</div>
@@ -1759,9 +1827,9 @@
       <!-- Painel: Condomínios -->
       <div class="tab-panel active" id="panel-cond" role="tabpanel" aria-labelledby="tab-cond">
         <div class="tab-content">
-          <h3>Substitua o mural de papel.<br/>Definitivamente.</h3>
+          <h3>Comunicação que os moradores<br/>realmente leem.</h3>
           <p>
-            Avisos de manutenção, convocações de assembleia, regras do salão de festas ou previsão do tempo para a semana: tudo publicado remotamente do computador do síndico ou da administradora, sem visita ao condomínio.
+            Substitua murais de papel por avisos digitais nos elevadores. Notifique manutenções e encomendas em tempo real, publicado remotamente do computador do síndico ou da administradora.
           </p>
           <div class="tab-features">
             <div class="tab-feature">
@@ -1803,9 +1871,9 @@
       <!-- Painel: Corporativo -->
       <div class="tab-panel" id="panel-corp" role="tabpanel" aria-labelledby="tab-corp">
         <div class="tab-content">
-          <h3>Recepções e corredores que comunicam, não decoram.</h3>
+          <h3>Recepções que impressionam.</h3>
           <p>
-            Diretórios digitais de salas, painéis de boas-vindas a visitantes com nome e empresa, e gerenciamento centralizado de avisos para múltiplos andares — tudo operado por um único gestor de TI ou facilities.
+            Exiba uma mensagem de boas-vindas para clientes importantes, diretórios de andares e agendas de salas de reunião integradas — tudo operado por um único gestor de TI ou facilities.
           </p>
           <div class="tab-features">
             <div class="tab-feature">
@@ -1847,9 +1915,9 @@
       <!-- Painel: Varejo & Alimentação -->
       <div class="tab-panel" id="panel-varejo" role="tabpanel" aria-labelledby="tab-varejo">
         <div class="tab-content">
-          <h3>Cardápio digital que você atualiza em 30 segundos.</h3>
+          <h3>O fim da impressão de cardápios.</h3>
           <p>
-            Sem gráficos enviados para gráfica. Sem banners impressos. Altere preço, remova item esgotado ou ative uma promoção relâmpago diretamente do celular — a mudança aparece em todas as telas da loja em segundos.
+            Destaque o prato do dia, altere preços instantaneamente e aumente o ticket médio em até 22% com vídeos que dão fome. Sem gráfica, sem banners impressos.
           </p>
           <div class="tab-features">
             <div class="tab-feature">
@@ -1891,9 +1959,9 @@
       <!-- Painel: Endomarketing & RH -->
       <div class="tab-panel" id="panel-rh" role="tabpanel" aria-labelledby="tab-rh">
         <div class="tab-content">
-          <h3>Suas metas chegam na tela da equipe. Não no e-mail ignorado.</h3>
+          <h3>Equipe alinhada e motivada.</h3>
           <p>
-            Sincronize dashboards de performance, aniversariantes do mês, comunicados de RH e reconhecimentos públicos diretamente nas TVs dos setores operacionais — sem depender do time de TI para cada atualização.
+            Projete dashboards do Power BI, metas batidas e aniversariantes do mês para todos verem, sem precisar enviar dezenas de e-mails. Sincronize tudo diretamente nas TVs dos setores operacionais.
           </p>
           <div class="tab-features">
             <div class="tab-feature">
@@ -1961,7 +2029,7 @@
           <span class="plan-amount">69</span>
           <span class="plan-period">/mês</span>
         </div>
-        <p class="plan-description">Perfeito para quem está começando: consultórios, lojas de bairro e condomínios pequenos. 2 telas já são suficientes para eliminar impressos e parar de perder clientes com comunicação desatualizada.</p>
+        <p class="plan-description">Para pequenos negócios. Consultórios, lojas de bairro e condomínios pequenos. 2 telas já eliminam impressos e comunicam com eficiência.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature">
@@ -2001,7 +2069,7 @@
           <span class="plan-amount" style="color:var(--text-primary)">149</span>
           <span class="plan-period">/mês</span>
         </div>
-        <p class="plan-description">O plano que a maioria escolhe. Múltiplos pontos de comunicação, zero tolerância a tela preta. 6 telas, agendamento avançado e integração com Power BI.</p>
+        <p class="plan-description">Para empresas e condomínios. Múltiplos pontos de comunicação, zero tolerância a tela preta. 6 telas, agendamento avançado e integração com Power BI.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature">
@@ -2039,7 +2107,7 @@
       <div class="preco-card reveal delay-3">
         <p class="plan-name">Enterprise</p>
         <p class="plan-consult">Sob consulta</p>
-        <p class="plan-description">Para redes com mais de 10 telas que exigem o impossível: White Label com sua marca, API customizada e um gerente de conta que atende seu WhatsApp.</p>
+        <p class="plan-description">Para franquias com mais de 10 telas que exigem o impossível: White Label com sua marca, API customizada e um gerente de conta dedicado.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature">
@@ -2080,16 +2148,16 @@
 <div class="cta-strip">
   <div class="container">
     <div class="label" style="margin:0 auto 20px;width:fit-content">Última chamada</div>
-    <h2 class="reveal">Daqui 5 minutos, sua tela pode estar no ar.<br/><span class="text-gradient">Ou você pode continuar com o pen-drive.</span></h2>
+    <h2 class="reveal">Daqui a 5 minutos, sua primeira tela pode estar no ar.<br/><span class="text-gradient">Ou você pode continuar procurando o pen-drive.</span></h2>
     <p class="reveal delay-1">
-      Crie a conta. Monte o conteúdo. Gere o código. Conecte a TV. Sem instalador, sem técnico, sem enrolação. É literalmente mais fácil do que pedir um Uber.
+      Crie a conta. Monte o conteúdo. Gere o código. Conecte a TV. Sem instalador, sem técnico, sem enrolação.
     </p>
     <div class="cta-strip-actions reveal delay-2">
       <a href="#precos" id="strip-cta-btn" class="btn btn-primary" style="font-size:1rem;padding:16px 32px;" onclick="scrollToSec('#precos'); return false;">
-        Quero ativar agora — é grátis
+        Quero ativar minha tela agora
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="#" class="btn btn-ghost" style="font-size:1rem;padding:16px 32px;">Agendar demonstração ao vivo</a>
+      <a href="#" class="btn btn-ghost" style="font-size:1rem;padding:16px 32px;">Falar com especialista</a>
     </div>
     <p style="margin-top:16px;font-size:0.8rem;color:var(--text-muted)">14 dias grátis · Sem cartão · Cancele quando quiser · +200 operações ativas</p>
   </div>
@@ -2288,7 +2356,7 @@
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
+        ctx.fillStyle = 'rgba(124, 58, 237, 0.3)';
         ctx.fill();
       }
     }
@@ -2315,7 +2383,7 @@
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+            ctx.strokeStyle = `rgba(124, 58, 237, ${alpha})`;
             ctx.lineWidth = 0.7;
             ctx.stroke();
           }
@@ -2330,7 +2398,7 @@
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+            ctx.strokeStyle = `rgba(124, 58, 237, ${alpha})`;
             ctx.lineWidth = 0.95;
             ctx.stroke();
           }
