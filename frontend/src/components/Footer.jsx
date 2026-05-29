@@ -10,7 +10,7 @@ const Footer = ({ scrollToSection, activeTab, setActiveTab, activeDock, triggerC
               <button 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
                 className="nav-logo" 
-                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', marginBottom: '16px' }}
               >
                 <div className="nav-logo-icon">
                   <svg 
@@ -29,41 +29,46 @@ const Footer = ({ scrollToSection, activeTab, setActiveTab, activeDock, triggerC
                 </div>
                 TelaHub
               </button>
-              <p>Gerenciamento profissional de telas digitais para operações sérias. Feito no Brasil.</p>
+              <p style={{ fontSize: '0.85rem', lineHeight: '1.7', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+                A plataforma universal de sinalização digital para gerenciar telas em elevadores residenciais, murais comerciais, shoppings, lojas físicas, consultórios, hotéis e escritórios. Do pequeno painel de avisos à rede nacional de displays corporativos.
+              </p>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                Feito com orgulho no Brasil para operações que não podem parar.
+              </p>
             </div>
             
             <div className="footer-links">
               <div className="footer-col">
-                <h4>Produto</h4>
+                <h4>Plataforma</h4>
                 <ul>
                   <li><button onClick={() => scrollToSection('#recursos', 'recursos')}>Recursos</button></li>
+                  <li><button onClick={() => scrollToSection('#casos', 'casos')}>Aplicações</button></li>
                   <li><button onClick={() => scrollToSection('#precos', 'precos')}>Preços</button></li>
-                  <li><a href="#" onClick={(e) => e.preventDefault()}>Changelog</a></li>
-                  <li><a href="#" onClick={(e) => e.preventDefault()}>Roadmap</a></li>
+                  <li><a href="#" onClick={(e) => { e.preventDefault(); scrollToSection('#argumento', 'argumento'); }}>Tecnologia</a></li>
                 </ul>
               </div>
               <div className="footer-col">
-                <h4>Casos de Uso</h4>
+                <h4>Aplicações</h4>
                 <ul>
-                  <li><button onClick={() => { setActiveTab('cond'); scrollToSection('#casos', 'casos'); }}>Condomínios</button></li>
-                  <li><button onClick={() => { setActiveTab('corp'); scrollToSection('#casos', 'casos'); }}>Corporativo</button></li>
-                  <li><button onClick={() => { setActiveTab('varejo'); scrollToSection('#casos', 'casos'); }}>Varejo</button></li>
-                  <li><button onClick={() => { setActiveTab('rh'); scrollToSection('#casos', 'casos'); }}>Endomarketing</button></li>
+                  <li><button onClick={() => { setActiveTab('cond'); scrollToSection('#casos', 'casos'); }}>Condomínios & Elevadores</button></li>
+                  <li><button onClick={() => { setActiveTab('corp'); scrollToSection('#casos', 'casos'); }}>Prédios Corporativos</button></li>
+                  <li><button onClick={() => { setActiveTab('varejo'); scrollToSection('#casos', 'casos'); }}>Varejo & Shoppings</button></li>
+                  <li><button onClick={() => { setActiveTab('rh'); scrollToSection('#casos', 'casos'); }}>Endomarketing & RH</button></li>
                 </ul>
               </div>
               <div className="footer-col">
-                <h4>Empresa</h4>
+                <h4>Termos & Legal</h4>
                 <ul>
-                  <li><a href="#" onClick={(e) => e.preventDefault()}>Sobre</a></li>
-                  <li><a href="#" onClick={(e) => e.preventDefault()}>Contato</a></li>
                   <li><a href="#" onClick={(e) => e.preventDefault()}>Privacidade</a></li>
                   <li><a href="#" onClick={(e) => e.preventDefault()}>Termos de Uso</a></li>
+                  <li><a href="#" onClick={(e) => e.preventDefault()}>Políticas de SLA</a></li>
+                  <li><a href="#" onClick={(e) => e.preventDefault()}>Suporte Geral</a></li>
                 </ul>
               </div>
             </div>
           </div>
           
-          <div className="footer-bottom">
+          <div className="footer-bottom" style={{ marginTop: '48px', paddingTop: '24px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
             <p>© 2026 TelaHub. Todos os direitos reservados.</p>
             <p>CNPJ 00.000.000/0001-00 · São Paulo, Brasil</p>
           </div>

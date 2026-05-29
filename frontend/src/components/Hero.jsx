@@ -23,7 +23,7 @@ const Hero = ({
               Ative todas. Agora.
             </h1>
             <p className="hero-subheadline animate-in">
-              Enquanto você lê isso, seus concorrentes já usam as TVs deles para vender mais e comunicar melhor. Você ainda depende de pen-drive e técnico presencial? Controle tudo pelo celular, em tempo real — mesmo se a internet cair.
+              De menus digitais a murais em elevadores de condomínio, shoppings, escritórios e recepções corporativas. O TelaHub transforma qualquer TV comum em um poderoso canal de comunicação interativa em tempo real — gerenciado pelo celular, com resiliência offline failsafe.
             </p>
             <div className="hero-actions animate-in">
               <button onClick={() => triggerConversionModal('Starter')} className="btn btn-primary">

@@ -373,12 +373,12 @@
       align-items: center;
       justify-content: center;
     }
-    .screen-a { background: url('./recepcao_boas_vindas.png') center/cover no-repeat; }
-    .screen-b { background: url('./aviso_condominio.png') center/cover no-repeat; }
-    .screen-c { background: url('./cardapio_digital.png') center/cover no-repeat; }
-    .screen-d { background: url('./painel_rh.png') center/cover no-repeat; }
-    .screen-e { background: url('./cardapio_digital.png') center/cover no-repeat; }
-    .screen-f { background: url('./recepcao_boas_vindas.png') center/cover no-repeat; }
+    .screen-a { background: url('./assets/images/recepcao_boas_vindas.png') center/cover no-repeat; }
+    .screen-b { background: url('./assets/images/aviso_condominio.png') center/cover no-repeat; }
+    .screen-c { background: url('./assets/images/cardapio_digital.png') center/cover no-repeat; }
+    .screen-d { background: url('./assets/images/painel_rh.png') center/cover no-repeat; }
+    .screen-e { background: url('./assets/images/cardapio_digital.png') center/cover no-repeat; }
+    .screen-f { background: url('./assets/images/recepcao_boas_vindas.png') center/cover no-repeat; }
     .screen-icon { display: none; }
     .screen-icon svg { width: 20px; height: 20px; color: var(--cyan); }
     .mockup-display-info {
@@ -843,10 +843,10 @@
       overflow: hidden;
       min-height: 200px;
     }
-    .tv-screen-sim.sim-cond { background: url('./aviso_condominio.png') center/cover no-repeat; }
-    .tv-screen-sim.sim-corp { background: url('./recepcao_boas_vindas.png') center/cover no-repeat; }
-    .tv-screen-sim.sim-varejo { background: url('./cardapio_digital.png') center/cover no-repeat; }
-    .tv-screen-sim.sim-rh { background: url('./painel_rh.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-cond { background: url('./assets/images/aviso_condominio.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-corp { background: url('./assets/images/recepcao_boas_vindas.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-varejo { background: url('./assets/images/cardapio_digital.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-rh { background: url('./assets/images/painel_rh.png') center/cover no-repeat; }
     .tv-screen-sim::before {
       content: '';
       position: absolute;
@@ -1461,7 +1461,7 @@
         </h1>
 
         <p class="hero-subheadline animate-in delay-2">
-          Enquanto você lê isso, seus concorrentes já usam as TVs deles para vender mais e comunicar melhor. Você ainda depende de pen-drive e técnico presencial? Controle tudo pelo celular, em tempo real — mesmo se a internet cair.
+          De menus digitais a murais em elevadores de condomínio, shoppings, escritórios e recepções corporativas. O TelaHub transforma qualquer TV comum em um poderoso canal de comunicação interativa em tempo real — gerenciado pelo celular, com resiliência offline failsafe.
         </p>
 
         <div class="hero-actions animate-in delay-3">
@@ -2099,11 +2099,14 @@
 <!-- ────────────────────────────────────────────
      FOOTER
 ──────────────────────────────────────────── -->
+<!-- ────────────────────────────────────────────
+     FOOTER
+──────────────────────────────────────────── -->
 <footer>
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <a href="#" class="nav-logo">
+        <a href="#" class="nav-logo" style="margin-bottom: 16px;">
           <div class="nav-logo-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="1" y="1" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
@@ -2112,41 +2115,48 @@
           </div>
           TelaHub
         </a>
-        <p>Gerenciamento profissional de telas digitais para operações sérias. Feito no Brasil.</p>
+        <p style="font-size: 0.85rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 24px;">
+          A plataforma universal de sinalização digital para gerenciar telas em elevadores residenciais, murais comerciais, shoppings, lojas físicas, consultórios, hotéis e escritórios. Do pequeno painel de avisos à rede nacional de displays corporativos.
+        </p>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">
+          Feito com orgulho no Brasil para operações que não podem parar.
+        </p>
       </div>
+      
       <div class="footer-links">
         <div class="footer-col">
-          <h4>Produto</h4>
+          <h4>Plataforma</h4>
           <ul>
-            <li><a href="#recursos">Recursos</a></li>
-            <li><a href="#precos">Preços</a></li>
-            <li><a href="#">Changelog</a></li>
-            <li><a href="#">Roadmap</a></li>
+            <li><a href="#recursos" onclick="scrollToSec('#recursos'); return false;">Recursos</a></li>
+            <li><a href="#casos" onclick="scrollToSec('#casos'); return false;">Aplicações</a></li>
+            <li><a href="#precos" onclick="scrollToSec('#precos'); return false;">Preços</a></li>
+            <li><a href="#argumento" onclick="scrollToSec('#argumento'); return false;">Tecnologia</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Casos de Uso</h4>
+          <h4>Aplicações</h4>
           <ul>
-            <li><a href="#">Condomínios</a></li>
-            <li><a href="#">Corporativo</a></li>
-            <li><a href="#">Varejo</a></li>
-            <li><a href="#">Endomarketing</a></li>
+            <li><a href="#casos" onclick="switchTab('cond'); scrollToSec('#casos'); return false;">Condomínios & Elevadores</a></li>
+            <li><a href="#casos" onclick="switchTab('corp'); scrollToSec('#casos'); return false;">Prédios Corporativos</a></li>
+            <li><a href="#casos" onclick="switchTab('varejo'); scrollToSec('#casos'); return false;">Varejo & Shoppings</a></li>
+            <li><a href="#casos" onclick="switchTab('rh'); scrollToSec('#casos'); return false;">Endomarketing & RH</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Empresa</h4>
+          <h4>Termos & Legal</h4>
           <ul>
-            <li><a href="#">Sobre</a></li>
-            <li><a href="#">Contato</a></li>
             <li><a href="#">Privacidade</a></li>
             <li><a href="#">Termos de Uso</a></li>
+            <li><a href="#">Políticas de SLA</a></li>
+            <li><a href="#">Suporte Geral</a></li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 TelaHub. Todos os direitos reservados.</p>
-      <p>CNPJ 00.000.000/0001-00 · São Paulo, Brasil</p>
+    
+    <div class="footer-bottom" style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+      <p style="font-size: 0.78rem; color: var(--text-muted);">© 2026 TelaHub. Todos os direitos reservados.</p>
+      <p style="font-size: 0.78rem; color: var(--text-muted);">CNPJ 00.000.000/0001-00 · São Paulo, SP</p>
     </div>
   </div>
 </footer>

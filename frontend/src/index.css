@@ -442,12 +442,12 @@ nav {
   align-items: center;
   justify-content: center;
 }
-.screen-a { background: url('/recepcao_boas_vindas.png') center/cover no-repeat; }
-.screen-b { background: url('/aviso_condominio.png') center/cover no-repeat; }
-.screen-c { background: url('/cardapio_digital.png') center/cover no-repeat; }
-.screen-d { background: url('/painel_rh.png') center/cover no-repeat; }
-.screen-e { background: url('/cardapio_digital.png') center/cover no-repeat; }
-.screen-f { background: url('/recepcao_boas_vindas.png') center/cover no-repeat; }
+.screen-a { background: url('/assets/images/recepcao_boas_vindas.png') center/cover no-repeat; }
+.screen-b { background: url('/assets/images/aviso_condominio.png') center/cover no-repeat; }
+.screen-c { background: url('/assets/images/cardapio_digital.png') center/cover no-repeat; }
+.screen-d { background: url('/assets/images/painel_rh.png') center/cover no-repeat; }
+.screen-e { background: url('/assets/images/cardapio_digital.png') center/cover no-repeat; }
+.screen-f { background: url('/assets/images/recepcao_boas_vindas.png') center/cover no-repeat; }
 .screen-icon { display: none; }
 .screen-icon svg, .screen-icon i { width: 20px; height: 20px; color: var(--cyan); }
 .mockup-display-info {
@@ -910,10 +910,10 @@ nav {
   overflow: hidden;
   min-height: 200px;
 }
-.tv-screen-sim.sim-cond { background: url('/aviso_condominio.png') center/cover no-repeat; }
-.tv-screen-sim.sim-corp { background: url('/recepcao_boas_vindas.png') center/cover no-repeat; }
-.tv-screen-sim.sim-varejo { background: url('/cardapio_digital.png') center/cover no-repeat; }
-.tv-screen-sim.sim-rh { background: url('/painel_rh.png') center/cover no-repeat; }
+.tv-screen-sim.sim-cond { background: url('/assets/images/aviso_condominio.png') center/cover no-repeat; }
+.tv-screen-sim.sim-corp { background: url('/assets/images/recepcao_boas_vindas.png') center/cover no-repeat; }
+.tv-screen-sim.sim-varejo { background: url('/assets/images/cardapio_digital.png') center/cover no-repeat; }
+.tv-screen-sim.sim-rh { background: url('/assets/images/painel_rh.png') center/cover no-repeat; }
 .tv-screen-sim::before {
   content: '';
   position: absolute;
