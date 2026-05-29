@@ -88,7 +88,7 @@ const UseCases = ({ activeTab, setActiveTab, telemetry }) => {
               </div>
               
               <div className="tab-visual">
-                <div className="tv-screen-sim">
+                <div className="tv-screen-sim sim-cond">
                   <div className="tv-screen-content">
                     <div className="screen-title" style={{ color: 'var(--cyan)', fontSize: '0.72rem', marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
                       Condomínio Alameda Verde
@@ -156,7 +156,7 @@ const UseCases = ({ activeTab, setActiveTab, telemetry }) => {
               </div>
               
               <div className="tab-visual">
-                <div className="tv-screen-sim">
+                <div className="tv-screen-sim sim-corp">
                   <div className="tv-screen-content">
                     <div className="screen-title" style={{ color: 'var(--indigo)', fontSize: '0.72rem', marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
                       HUB Inovação — Recepção
@@ -222,7 +222,7 @@ const UseCases = ({ activeTab, setActiveTab, telemetry }) => {
               </div>
               
               <div className="tab-visual">
-                <div className="tv-screen-sim">
+                <div className="tv-screen-sim sim-varejo">
                   <div className="tv-screen-content">
                     <div className="screen-title" style={{ color: 'var(--purple)', fontSize: '0.72rem', marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
                       Restaurante Central — Menu Board
@@ -288,7 +288,7 @@ const UseCases = ({ activeTab, setActiveTab, telemetry }) => {
               </div>
               
               <div className="tab-visual">
-                <div className="tv-screen-sim">
+                <div className="tv-screen-sim sim-rh">
                   <div className="tv-screen-content">
                     <div className="screen-title" style={{ color: 'var(--indigo)', fontSize: '0.72rem', marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
                       Setor Comercial — Meta Maio

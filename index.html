@@ -371,13 +371,13 @@
       align-items: center;
       justify-content: center;
     }
-    .screen-a { background: linear-gradient(135deg, #1a2a4a, #0d1f3c); }
-    .screen-b { background: linear-gradient(135deg, #1a1a2e, #16213e); }
-    .screen-c { background: linear-gradient(135deg, #0f2027, #203a43); }
-    .screen-d { background: linear-gradient(135deg, #2d1b69, #11998e); opacity: 0.5; }
-    .screen-e { background: linear-gradient(135deg, #141e30, #243b55); opacity: 0.5; }
-    .screen-f { background: linear-gradient(135deg, #1a1a2e, #16213e); opacity: 0.5; }
-    .screen-icon { opacity: 0.3; }
+    .screen-a { background: url('./recepcao_boas_vindas.png') center/cover no-repeat; }
+    .screen-b { background: url('./aviso_condominio.png') center/cover no-repeat; }
+    .screen-c { background: url('./cardapio_digital.png') center/cover no-repeat; }
+    .screen-d { background: url('./painel_rh.png') center/cover no-repeat; }
+    .screen-e { background: url('./cardapio_digital.png') center/cover no-repeat; }
+    .screen-f { background: url('./recepcao_boas_vindas.png') center/cover no-repeat; }
+    .screen-icon { display: none; }
     .screen-icon svg { width: 20px; height: 20px; color: var(--cyan); }
     .mockup-display-info {
       display: flex;
@@ -837,17 +837,38 @@
       font-size: 0.75rem;
       color: var(--text-muted);
       text-align: center;
-      padding: 24px;
       position: relative;
       overflow: hidden;
+      min-height: 200px;
     }
+    .tv-screen-sim.sim-cond { background: url('./aviso_condominio.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-corp { background: url('./recepcao_boas_vindas.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-varejo { background: url('./cardapio_digital.png') center/cover no-repeat; }
+    .tv-screen-sim.sim-rh { background: url('./painel_rh.png') center/cover no-repeat; }
     .tv-screen-sim::before {
       content: '';
       position: absolute;
       inset: 0;
       background: radial-gradient(ellipse at center, rgba(0,240,255,0.04) 0%, transparent 70%);
     }
-    .tv-screen-content { position: relative; z-index: 1; }
+    .tv-screen-content {
+      position: absolute;
+      inset: 12px;
+      z-index: 1;
+      background: rgba(11, 15, 25, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: opacity var(--transition);
+    }
+    .tv-screen-sim:hover .tv-screen-content {
+      opacity: 0.15;
+    }
     .tv-screen-content .screen-title {
       font-size: 0.95rem;
       font-weight: 600;
@@ -1757,7 +1778,7 @@
           </div>
         </div>
         <div class="tab-visual">
-          <div class="tv-screen-sim">
+          <div class="tv-screen-sim sim-cond">
             <div class="tv-screen-content">
               <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Condomínio Alameda Verde</div>
               <div class="screen-title">📋 Aviso de Manutenção</div>
@@ -1801,7 +1822,7 @@
           </div>
         </div>
         <div class="tab-visual">
-          <div class="tv-screen-sim">
+          <div class="tv-screen-sim sim-corp">
             <div class="tv-screen-content">
               <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">HUB Inovação — Recepção</div>
               <div class="screen-title">👋 Bem-vindo, Carlos Mendes</div>
@@ -1845,7 +1866,7 @@
           </div>
         </div>
         <div class="tab-visual">
-          <div class="tv-screen-sim">
+          <div class="tv-screen-sim sim-varejo">
             <div class="tv-screen-content">
               <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Restaurante Central — Menu Board</div>
               <div class="screen-title">🍝 Prato do Dia</div>
@@ -1889,7 +1910,7 @@
           </div>
         </div>
         <div class="tab-visual">
-          <div class="tv-screen-sim">
+          <div class="tv-screen-sim sim-rh">
             <div class="tv-screen-content">
               <div class="screen-title" style="color:var(--cyan);font-size:0.7rem;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Setor Comercial — Meta Maio</div>
               <div class="screen-title">📈 Vendas do Mês</div>
