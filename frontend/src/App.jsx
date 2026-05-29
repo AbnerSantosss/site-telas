@@ -58,22 +58,7 @@ function App() {
       setLastSyncTime(Math.floor(Math.random() * 7) + 1);
     }, 4000);
 
-    // B. Initialize Lenis Inertial Smooth Scroll
-    let lenis;
-    if (typeof window !== 'undefined' && window.Lenis) {
-      lenis = new window.Lenis({
-        duration: 1.1,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        touchMultiplier: 1.3
-      });
 
-      const scrollLoop = (time) => {
-        lenis.raf(time);
-        requestAnimationFrame(scrollLoop);
-      };
-      requestAnimationFrame(scrollLoop);
-    }
 
     // C. Initialize GSAP Elite Entrance Animations
     let gsapCtx;
